@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Painel do Colaborador | PASSO ÚNICO
+</title>
+
+<link
+rel="stylesheet"
+href="css/global.css">
+
+<link
+rel="stylesheet"
+href="css/components.css">
+
+<link
+rel="stylesheet"
+href="css/header.css">
+
+<link
+rel="stylesheet"
+href="css/toast.css">
+
+<link
+rel="stylesheet"
+href="css/modal.css">
+
+<link
+rel="stylesheet"
+href="css/painel-colaborador.css">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div id="header-dinamico"></div>
+
+<!-- PAINEL -->
+
+<main class="painel">
+
+<div class="painel-container">
+
+<!-- TOPO -->
+
+<section class="painel-topo">
+
+<div>
+
+<h1>
+
+Meu painel
+
+</h1>
+
+<p>
+
+Gerencie seus calçados cadastrados,
+acompanhe entregas e contribua para
+novas possibilidades através da plataforma.
+
+</p>
+
+</div>
+
+<a
+href="cadastro.html"
+class="btn-novo">
+
+Cadastrar novo calçado
+
+</a>
+
+</section>
+
+<!-- MÉTRICAS -->
+
+<section class="metricas">
+
+<div class="metrica-card">
+
+<span>
+
+Calçados cadastrados
+
+</span>
+
+<strong id="totalCalcados">
+
+0
+
+</strong>
+
+</div>
+
+<div class="metrica-card">
+
+<span>
+
+Disponíveis
+
+</span>
+
+<strong id="totalDisponiveis">
+
+0
+
+</strong>
+
+</div>
+
+<div class="metrica-card">
+
+<span>
+
+Entregues
+
+</span>
+
+<strong id="totalEntregues">
+
+0
+
+</strong>
+
+</div>
+
+</section>
+
+<!-- LISTA -->
+
+<section
+class="lista-calcados"
+id="listaCalcados">
+
+<!-- JS -->
+
+</section>
+
+</div>
+
+</main>
+
+<!-- VARIÁVEL GLOBAL -->
+
+<script>
+
+let paginaAtual = 'painel';
+
+</script>
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- CORE -->
+
+<script src="js/supabase.js"></script>
+
+<!-- COMPONENTES -->
+
+<script src="js/header.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/modal.js"></script>
+
+<script src="js/loader.js"></script>
+
+<!-- PÁGINA -->
+
+<script src="js/painel-colaborador.js"></script>
+
+</body>
+
+</html>

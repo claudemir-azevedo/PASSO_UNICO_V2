@@ -1,0 +1,884 @@
+/* ===================================================== */
+/* BUSCAR.CSS */
+/* PASSO ÚNICO */
+/* ===================================================== */
+
+/* ===================================================== */
+/* HERO */
+/* ===================================================== */
+
+.buscar-hero{
+
+    padding-top:170px;
+    padding-bottom:80px;
+
+    background:
+    linear-gradient(
+        90deg,
+        rgba(4,18,67,.95) 0%,
+        rgba(4,18,67,.85) 30%,
+        rgba(4,18,67,.15) 60%,
+        rgba(4,18,67,.05) 100%
+    ),
+    url('../assets/img/protese-banner.jpg');
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    text-align:center;
+
+    position:relative;
+}
+
+.hero-content{
+
+    max-width:920px;
+
+    margin:auto;
+
+    position:relative;
+    z-index:2;
+}
+
+.hero-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:14px 22px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.15);
+
+    backdrop-filter:blur(10px);
+
+    color:#ffffff;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    margin-bottom:28px;
+}
+
+.buscar-hero h1{
+
+    font-size:78px;
+
+    line-height:.95;
+
+    font-weight:900;
+
+    letter-spacing:-0.08em;
+
+    margin-bottom:24px;
+
+    color:#ffffff;
+}
+
+.buscar-hero p{
+
+    font-size:22px;
+
+    line-height:1.7;
+
+    color:rgba(255,255,255,.9);
+
+    max-width:700px;
+
+    margin:auto;
+}
+
+/* ===================================================== */
+/* SECTION */
+/* ===================================================== */
+
+.buscar-section{
+
+    padding-top:40px;
+    padding-bottom:70px;
+}
+
+/* ===================================================== */
+/* FILTROS */
+/* ===================================================== */
+
+.filtros-box{
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:28px;
+
+    padding:30px;
+
+    margin-bottom:50px;
+
+    box-shadow:
+    0 10px 40px rgba(15,23,42,.05);
+
+    transition:.3s;
+}
+
+.filtros-box:hover{
+
+    box-shadow:
+    0 20px 60px rgba(15,23,42,.08);
+}
+
+.filtros-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    1.4fr
+    1fr
+    1fr
+    220px;
+
+    gap:18px;
+
+    align-items:end;
+}
+
+.filtro-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+}
+
+.filtro-group label{
+
+    font-size:13px;
+
+    font-weight:800;
+
+    color:#07143f;
+
+    text-transform:uppercase;
+
+    letter-spacing:.06em;
+}
+
+.filtro-group input,
+.filtro-group select{
+
+    height:60px;
+
+    border:1px solid #dbe4f0;
+
+    border-radius:16px;
+
+    background:#f8fafc;
+
+    padding:0 18px;
+
+    font-size:15px;
+
+    color:#0f172a;
+
+    transition:.3s;
+}
+
+.filtro-group input:focus,
+.filtro-group select:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+    background:#ffffff;
+
+    box-shadow:
+    0 0 0 4px rgba(37,99,235,.10);
+}
+
+.buscar-btn{
+
+    width:100%;
+
+    height:60px;
+
+    font-size:16px;
+
+    font-weight:800;
+
+    border-radius:16px;
+}
+
+/* ===================================================== */
+/* RESULTADOS */
+/* ===================================================== */
+
+.resultados-topo{
+
+    margin-bottom:14px;
+}
+
+.resultados-topo h2{
+
+    font-size:48px;
+
+    color:#07143f;
+
+    margin-bottom:8px;
+}
+
+.resultados-topo p{
+
+    color:#64748b;
+
+    font-size:18px;
+}
+
+/* ===================================================== */
+/* GRID */
+/* ===================================================== */
+
+.calcados-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:28px;
+
+    margin-bottom:40px;
+}
+
+/* ===================================================== */
+/* CARD */
+/* ===================================================== */
+
+.calcado-card{
+
+    background:#ffffff;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    box-shadow:
+    0 18px 50px rgba(15,23,42,.06);
+
+    transition:.3s ease;
+    cursor:pointer;
+
+}
+
+.calcado-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 30px 70px rgba(15,23,42,.12);
+}
+
+/* ===================================================== */
+/* BADGE DISPONÍVEL */
+/* ===================================================== */
+
+.calcado-imagem{
+
+height:240px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+padding:20px;
+
+background:#fff;
+
+}
+
+.calcado-imagem img{
+
+max-width:100%;
+
+max-height:200px;
+
+width:auto;
+
+height:auto;
+
+object-fit:contain;
+
+}
+
+.status-badge{
+
+    position:absolute;
+
+    top:16px;
+    right:16px;
+
+    background:#22c55e;
+
+    color:#ffffff;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    letter-spacing:.03em;
+
+    box-shadow:
+    0 8px 20px rgba(34,197,94,.35);
+
+    z-index:10;
+}
+
+.sem-imagem{
+
+    height:240px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:#f1f5f9;
+
+    color:#64748b;
+
+    font-weight:700;
+
+    border-bottom:
+    1px solid #e2e8f0;
+}
+
+.calcado-conteudo{
+
+    padding:20px;
+}
+
+/* ===================================================== */
+/* TAG */
+/* ===================================================== */
+
+.calcado-tag{
+
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    background:#e8f0ff;
+
+    color:#2563eb;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    margin-bottom:16px;
+}
+
+/* ===================================================== */
+/* TITULO */
+/* ===================================================== */
+
+.calcado-conteudo h3{
+
+    font-size:26px;
+
+    font-weight:800;
+
+    color:#07143f;
+
+    margin-bottom:14px;
+
+    letter-spacing:-0.03em;
+}
+
+/* ===================================================== */
+/* INFO */
+/* ===================================================== */
+
+.calcado-info{
+
+padding:28px;
+
+display:flex;
+
+flex-direction:column;
+
+flex:1;
+
+}
+
+.calcado-info p{
+
+    margin-bottom:10px;
+
+    color:#64748b;
+
+    font-size:15px;
+
+    line-height:1.5;
+}
+
+.localizacao{
+
+    font-size:16px;
+
+    font-weight:600;
+
+    color:#475569;
+
+    margin-bottom:20px;
+}
+
+/* ===================================================== */
+/* BOTÃO */
+/* ===================================================== */
+
+.btn-whatsapp{
+
+    height:50px;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #22c55e,
+        #2563eb
+    );
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    color:#ffffff;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.btn-whatsapp:hover{
+
+    transform:translateY(-2px);
+}
+
+/* ===================================================== */
+/* SEM RESULTADO */
+/* ===================================================== */
+
+.sem-resultado{
+
+    padding:60px;
+
+    background:#ffffff;
+
+    border-radius:24px;
+
+    text-align:center;
+
+    grid-column:1/-1;
+}
+
+/* ===================================================== */
+/* TABLET */
+/* ===================================================== */
+
+@media(max-width:1100px){
+
+    .filtros-grid{
+
+        grid-template-columns:
+        1fr
+        1fr;
+    }
+
+    .calcados-grid{
+
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .buscar-hero h1{
+
+        font-size:64px;
+    }
+
+}
+
+/* ===================================================== */
+/* MOBILE */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    .buscar-hero{
+
+        padding-top:220px;
+        padding-bottom:60px;
+    }
+
+    .buscar-hero h1{
+
+        font-size:46px;
+    }
+
+    .buscar-hero p{
+
+        font-size:18px;
+    }
+
+    .filtros-box{
+
+        padding:20px;
+    }
+
+    .filtros-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .calcados-grid{
+
+        grid-template-columns:1fr;
+    }
+
+    .resultados-topo h2{
+
+        font-size:36px;
+    }
+    .card-local{
+
+margin-top:12px;
+font-size:15px;
+color:#64748b;
+font-weight:500;
+
+}
+
+.card-detalhes{
+
+display:flex;
+flex-direction:column;
+gap:8px;
+margin-top:16px;
+
+}
+
+.card-detalhes span{
+
+display:flex;
+align-items:center;
+
+padding:10px 14px;
+
+background:#f8fafc;
+
+border:1px solid #e2e8f0;
+
+border-radius:12px;
+
+font-size:14px;
+font-weight:600;
+color:#334155;
+
+}
+
+.btn-detalhes{
+
+margin-top:20px;
+
+width:100%;
+
+height:52px;
+
+border:none;
+
+border-radius:16px;
+
+background:
+linear-gradient(
+135deg,
+#0f172a,
+#2563eb
+);
+
+color:white;
+
+font-size:15px;
+
+font-weight:700;
+
+cursor:pointer;
+
+transition:.3s ease;
+
+box-shadow:
+0 8px 20px rgba(37,99,235,.20);
+
+}
+
+.btn-detalhes{
+    background:red !important;
+    color:white !important;
+    height:60px !important;
+}
+
+.btn-detalhes:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+0 12px 28px rgba(37,99,235,.30);
+
+}
+
+.btn-detalhes:hover{
+
+transform:translateY(-2px);
+
+}
+/* ========================================
+CARD PREMIUM
+======================================== */
+
+.calcado-card{
+
+background:#fff;
+
+border-radius:28px;
+
+overflow:hidden;
+
+border:1px solid #e5e7eb;
+
+box-shadow:
+0 10px 35px rgba(15,23,42,.08);
+
+display:flex;
+
+flex-direction:column;
+
+height:100%;
+
+}
+
+.calcado-card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:
+0 20px 50px rgba(15,23,42,0.12);
+
+}
+
+.calcado-imagem{
+
+height:260px;
+position:relative;
+overflow:hidden;
+
+background:#f8fafc;
+
+}
+
+.calcado-imagem img{
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+transition:.4s ease;
+
+}
+
+.calcado-card:hover img{
+
+transform:scale(1.04);
+
+}
+
+.calcado-info{
+
+padding:24px;
+
+display:flex;
+
+flex-direction:column;
+
+flex:1;
+
+}
+
+.card-detalhes{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:8px;
+
+margin-top:12px;
+
+}
+
+.card-detalhes span{
+
+padding:8px 12px;
+
+background:#f8fafc;
+
+border:1px solid #e2e8f0;
+
+border-radius:999px;
+
+font-size:13px;
+
+font-weight:600;
+
+color:#334155;
+
+}
+
+.tipo-badge{
+
+display:inline-flex;
+
+width:max-content;
+
+padding:8px 16px;
+
+border-radius:999px;
+
+background:#eef2ff;
+
+color:#2563eb;
+
+font-weight:700;
+
+font-size:13px;
+
+}
+
+.calcado-info h3{
+
+margin:0;
+
+font-size:34px;
+
+font-weight:800;
+
+color:#0f172a;
+
+line-height:1.1;
+
+}
+
+.card-local{
+
+font-size:18px;
+
+color:#64748b;
+
+font-weight:600;
+
+}
+
+.card-detalhes{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:10px;
+
+}
+
+.card-detalhes span{
+
+padding:8px 14px;
+
+background:#f8fafc;
+
+border:
+1px solid #e2e8f0;
+
+border-radius:999px;
+
+font-size:14px;
+
+font-weight:600;
+
+color:#334155;
+
+}
+
+.btn-detalhes{
+
+margin-top:auto;
+
+width:100%;
+
+height:52px;
+
+border:none;
+
+border-radius:16px;
+
+background:
+linear-gradient(
+135deg,
+#22c55e,
+#2563eb
+);
+
+color:#fff;
+
+font-size:15px;
+
+font-weight:700;
+
+cursor:pointer;
+
+transition:.25s ease;
+
+}
+
+.btn-detalhes:hover{
+
+transform:translateY(-2px);
+
+}
+
+.btn-detalhes:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+0 12px 30px rgba(37,99,235,.25);
+
+}

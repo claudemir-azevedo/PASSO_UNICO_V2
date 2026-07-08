@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Painel Administrativo | PASSO ÚNICO
+</title>
+
+<link
+rel="stylesheet"
+href="css/global.css">
+
+<link
+rel="stylesheet"
+href="css/components.css">
+
+<link
+rel="stylesheet"
+href="css/header.css">
+
+<link
+rel="stylesheet"
+href="css/toast.css">
+
+<link
+rel="stylesheet"
+href="css/modal.css">
+
+<link
+rel="stylesheet"
+href="css/gerenciar.css">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div id="header-dinamico"></div>
+
+<!-- PAINEL -->
+
+<main class="painel-admin">
+
+<div class="admin-container">
+
+<!-- TOPO -->
+
+<section class="admin-topo">
+
+<div>
+
+<h1>
+
+Painel administrativo
+
+</h1>
+
+<p>
+
+Gerencie usuários, acompanhe entregas
+e monitore os calçados cadastrados
+na plataforma PASSO ÚNICO.
+
+</p>
+
+</div>
+
+</section>
+
+<!-- MÉTRICAS -->
+
+<section class="metricas-grid">
+
+<div class="metrica-card">
+
+<span>
+
+Total de calçados
+
+</span>
+
+<strong id="totalCalcados">
+
+0
+
+</strong>
+
+</div>
+
+<div class="metrica-card">
+
+<span>
+
+Disponíveis
+
+</span>
+
+<strong id="totalDisponiveis">
+
+0
+
+</strong>
+
+</div>
+
+<div class="metrica-card">
+
+<span>
+
+Entregues
+
+</span>
+
+<strong id="totalEntregues">
+
+0
+
+</strong>
+
+</div>
+
+<div class="metrica-card">
+
+<span>
+
+Usuários cadastrados
+
+</span>
+
+<strong id="totalUsuarios">
+
+0
+
+</strong>
+
+</div>
+
+</section>
+
+<!-- TABELA -->
+
+<section class="tabela-area">
+
+<div class="tabela-topo">
+
+<div>
+
+<h2>
+
+Calçados cadastrados
+
+</h2>
+
+<p>
+
+Gerencie os itens disponíveis na plataforma.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="tabela-scroll">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+
+Tipo
+
+</th>
+
+<th>
+
+Número
+
+</th>
+
+<th>
+
+Cidade
+
+</th>
+
+<th>
+
+Estado
+
+</th>
+
+<th>
+
+Status
+
+</th>
+
+<th>
+
+Usuário
+
+</th>
+
+<th>
+
+Ações
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tabelaCalcados">
+
+<!-- JS -->
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+</div>
+
+</main>
+
+<!-- VARIÁVEL GLOBAL -->
+
+<script>
+
+let paginaAtual = 'gerenciar';
+
+</script>
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- CORE -->
+
+<script src="js/supabase.js"></script>
+
+<!-- COMPONENTES -->
+
+<script src="js/header.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/modal.js"></script>
+
+<script src="js/loader.js"></script>
+
+<!-- PÁGINA -->
+
+<script src="js/gerenciar.js"></script>
+
+</body>
+
+</html>

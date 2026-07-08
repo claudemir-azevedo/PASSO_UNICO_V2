@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Criar Conta | PASSO ÚNICO
+</title>
+
+<link
+rel="stylesheet"
+href="css/global.css">
+
+<link
+rel="stylesheet"
+href="css/components.css">
+
+<link
+rel="stylesheet"
+href="css/header.css">
+
+<link
+rel="stylesheet"
+href="css/toast.css">
+
+<link
+rel="stylesheet"
+href="css/criar-conta.css">
+
+</head>
+
+/* RESET */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+
+/* BODY */
+
+body{
+
+font-family:'Inter',sans-serif;
+
+background:#eef3f8;
+
+color:#333;
+
+}
+
+
+/* CONTAINER */
+
+.container{
+
+max-width:760px;
+
+margin:auto;
+
+padding:40px 20px;
+
+}
+
+
+/* CARD */
+
+.card{
+
+background:white;
+
+border-radius:28px;
+
+padding:36px;
+
+border:
+1px solid #e2e8f0;
+
+box-shadow:
+0 10px 40px rgba(15,23,42,0.08);
+
+}
+
+
+/* TITULO */
+
+.titulo-card{
+
+margin-bottom:28px;
+
+}
+
+
+.titulo-card h2{
+
+font-size:38px;
+
+letter-spacing:-1px;
+
+margin-bottom:8px;
+
+color:#0f172a;
+
+}
+
+
+.titulo-card p{
+
+color:#64748b;
+
+line-height:1.8;
+
+}
+
+
+/* FORM */
+
+.form-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(260px,1fr));
+
+gap:18px;
+
+}
+
+
+/* INPUT */
+
+input,
+select{
+
+width:100%;
+
+padding:16px;
+
+border:
+1px solid #dbe3ec;
+
+border-radius:16px;
+
+font-size:14px;
+
+outline:none;
+
+transition:0.2s ease;
+
+background:white;
+
+}
+
+
+input:focus,
+select:focus{
+
+border-color:#2563eb;
+
+box-shadow:
+0 0 0 4px rgba(37,99,235,0.10);
+
+}
+
+
+/* BOTÃO */
+
+.botoes{
+
+margin-top:28px;
+
+}
+
+
+button{
+
+border:none;
+
+cursor:pointer;
+
+padding:16px 22px;
+
+border-radius:16px;
+
+color:white;
+
+font-size:15px;
+
+font-weight:700;
+
+background:#2563eb;
+
+transition:0.2s ease;
+
+width:100%;
+
+}
+
+
+button:hover{
+
+transform:translateY(-2px);
+
+}
+
+
+/* STATUS */
+
+.status{
+
+margin-top:22px;
+
+padding:16px;
+
+border-radius:14px;
+
+font-size:14px;
+
+display:none;
+
+font-weight:600;
+
+line-height:1.6;
+
+}
+
+
+.erro{
+
+background:#fef2f2;
+
+color:#dc2626;
+
+border:
+1px solid #fecaca;
+
+}
+
+
+.sucesso{
+
+background:#f0fdf4;
+
+color:#15803d;
+
+border:
+1px solid #bbf7d0;
+
+}
+
+
+/* RESPONSIVO */
+
+@media(max-width:768px){
+
+.card{
+
+padding:28px;
+
+}
+
+.titulo-card h2{
+
+font-size:32px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div id="header-dinamico"></div>
+
+<!-- CONTAINER -->
+
+<div class="container">
+
+<div class="card">
+
+<div class="titulo-card">
+
+<h2>
+
+Criar Conta
+
+</h2>
+
+<p>
+
+Cadastre novos usuários no sistema.
+
+</p>
+
+</div>
+
+<div class="form-grid">
+
+<input
+id="nome"
+placeholder="Nome completo">
+
+<input
+id="email"
+type="email"
+placeholder="Email">
+
+<input
+id="telefone"
+placeholder="Telefone">
+
+<input
+id="cidade"
+placeholder="Cidade">
+
+<input
+id="estado"
+placeholder="Estado">
+
+<input
+id="senha"
+type="password"
+placeholder="Senha">
+
+<select id="tipo_usuario">
+
+<option value="colaborador">
+
+Colaborador
+
+</option>
+
+<option value="admin">
+
+Administrador
+
+</option>
+
+</select>
+
+</div>
+
+<div class="botoes">
+
+<button id="btnCriar">
+
+Criar Conta
+
+</button>
+
+</div>
+
+<div
+id="mensagem"
+class="status">
+
+</div>
+
+</div>
+
+</div>
+
+<!-- VARIÁVEL GLOBAL -->
+
+<script>
+
+let paginaAtual = 'cadastro';
+
+</script>
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- CORE -->
+
+<script src="js/supabase.js"></script>
+
+<!-- COMPONENTES -->
+
+<script src="js/header.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/modal.js"></script>
+
+<script src="js/loader.js"></script>
+
+<!-- PÁGINA -->
+
+<script src="js/criar-conta.js"></script>
+
+</body>
+
+</html>

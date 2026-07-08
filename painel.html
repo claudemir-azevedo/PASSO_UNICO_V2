@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+PASSO ÚNICO - Painel
+</title>
+
+<!-- CSS -->
+
+<link
+rel="stylesheet"
+href="css/global.css">
+
+<link
+rel="stylesheet"
+href="css/header.css">
+
+<link
+rel="stylesheet"
+href="css/toast.css">
+
+<link
+rel="stylesheet"
+href="css/modal.css">
+
+<style>
+
+/* ========================================
+RESET
+======================================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+
+/* ========================================
+BODY
+======================================== */
+
+body{
+
+font-family:'Inter',sans-serif;
+
+background:#f8fafc;
+
+color:#0f172a;
+
+}
+
+
+/* ========================================
+CONTAINER
+======================================== */
+
+.container{
+
+max-width:1300px;
+
+margin:auto;
+
+padding:40px 24px;
+
+}
+
+
+/* ========================================
+HERO
+======================================== */
+
+.hero{
+
+margin-bottom:34px;
+
+}
+
+.hero h1{
+
+font-size:52px;
+
+letter-spacing:-2px;
+
+margin-bottom:14px;
+
+line-height:1.05;
+
+}
+
+.hero p{
+
+font-size:18px;
+
+line-height:1.8;
+
+color:#64748b;
+
+max-width:760px;
+
+}
+
+
+/* ========================================
+LAYOUT
+======================================== */
+
+.layout{
+
+display:grid;
+
+grid-template-columns:
+1fr 1fr;
+
+gap:24px;
+
+margin-bottom:30px;
+
+}
+
+
+/* ========================================
+CARD
+======================================== */
+
+.card{
+
+background:white;
+
+border:
+1px solid #e2e8f0;
+
+border-radius:28px;
+
+padding:28px;
+
+}
+
+
+/* ========================================
+TÍTULOS
+======================================== */
+
+.card h2{
+
+font-size:32px;
+
+letter-spacing:-1px;
+
+margin-bottom:20px;
+
+}
+
+
+/* ========================================
+INPUTS
+======================================== */
+
+input,
+select{
+
+width:100%;
+
+padding:15px 16px;
+
+border-radius:16px;
+
+border:
+1px solid #dbe3ec;
+
+background:white;
+
+font-size:14px;
+
+outline:none;
+
+margin-bottom:14px;
+
+transition:0.2s ease;
+
+}
+
+input:focus,
+select:focus{
+
+border-color:#94a3b8;
+
+box-shadow:
+0 0 0 4px rgba(148,163,184,0.15);
+
+}
+
+
+/* ========================================
+BOTÕES
+======================================== */
+
+button{
+
+border:none;
+
+cursor:pointer;
+
+padding:
+14px 18px;
+
+border-radius:14px;
+
+font-size:14px;
+
+font-weight:600;
+
+transition:0.2s ease;
+
+}
+
+.btn-salvar{
+
+background:#0f172a;
+
+color:white;
+
+width:100%;
+
+}
+
+.btn-salvar:hover{
+
+background:#1e293b;
+
+}
+
+.btn-excluir{
+
+background:#fef2f2;
+
+color:#dc2626;
+
+}
+
+.btn-excluir:hover{
+
+background:#fee2e2;
+
+}
+
+
+/* ========================================
+MENSAGEM
+======================================== */
+
+.mensagem{
+
+padding:16px;
+
+border-radius:16px;
+
+background:#ecfdf5;
+
+color:#166534;
+
+margin-bottom:20px;
+
+display:none;
+
+font-weight:600;
+
+}
+
+
+/* ========================================
+LISTA
+======================================== */
+
+.lista{
+
+margin-top:20px;
+
+}
+
+
+/* ========================================
+CARD CALÇADO
+======================================== */
+
+.calcado-card{
+
+background:white;
+
+border:
+1px solid #e2e8f0;
+
+border-radius:24px;
+
+padding:18px;
+
+margin-bottom:18px;
+
+display:flex;
+
+gap:18px;
+
+align-items:flex-start;
+
+transition:0.2s ease;
+
+}
+
+.calcado-card:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+0 14px 30px rgba(15,23,42,0.05);
+
+}
+
+
+/* ========================================
+IMAGEM
+======================================== */
+
+.calcado-card img{
+
+width:140px;
+height:140px;
+
+object-fit:cover;
+
+border-radius:18px;
+
+}
+
+
+/* ========================================
+INFO
+======================================== */
+
+.calcado-info{
+
+flex:1;
+
+}
+
+.calcado-info h3{
+
+font-size:24px;
+
+margin-bottom:8px;
+
+}
+
+.calcado-info p{
+
+font-size:14px;
+
+line-height:1.8;
+
+color:#475569;
+
+margin-bottom:4px;
+
+}
+
+
+/* ========================================
+RESPONSIVO
+======================================== */
+
+@media(max-width:900px){
+
+.layout{
+
+grid-template-columns:1fr;
+
+}
+
+.calcado-card{
+
+flex-direction:column;
+
+}
+
+.calcado-card img{
+
+width:100%;
+height:240px;
+
+}
+
+}
+
+
+@media(max-width:700px){
+
+.container{
+
+padding:30px 16px;
+
+}
+
+.hero h1{
+
+font-size:40px;
+
+}
+
+.hero p{
+
+font-size:16px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div id="header-dinamico"></div>
+
+<!-- CONTAINER -->
+
+<div class="container">
+
+<!-- HERO -->
+
+<div class="hero">
+
+<h1>
+
+Painel administrativo.
+
+</h1>
+
+<p>
+
+Gerencie usuários, calçados cadastrados
+e acompanhe os registros da plataforma.
+
+</p>
+
+</div>
+
+<!-- MENSAGEM -->
+
+<div
+id="mensagem"
+class="mensagem">
+
+</div>
+
+<!-- LAYOUT -->
+
+<div class="layout">
+
+<!-- USUÁRIOS -->
+
+<div class="card">
+
+<h2>
+
+Cadastro de Usuário
+
+</h2>
+
+<input
+id="nome"
+placeholder="Nome">
+
+<input
+id="cidade_usuario"
+placeholder="Cidade">
+
+<input
+id="estado_usuario"
+placeholder="Estado">
+
+<button
+class="btn-salvar"
+onclick="cadastrarUsuario()">
+
+Cadastrar Usuário
+
+</button>
+
+</div>
+
+<!-- CALÇADOS -->
+
+<div class="card">
+
+<h2>
+
+Cadastro de Calçado
+
+</h2>
+
+<select id="usuario_select">
+
+</select>
+
+<select id="tipo">
+
+<option value="Tênis">
+Tênis
+</option>
+
+<option value="Sapato">
+Sapato
+</option>
+
+<option value="Sandália">
+Sandália
+</option>
+
+<option value="Chinelo">
+Chinelo
+</option>
+
+<option value="Bota">
+Bota
+</option>
+
+</select>
+
+<input
+id="numero"
+placeholder="Número">
+
+<select id="pe">
+
+<option>
+Direito
+</option>
+
+<option>
+Esquerdo
+</option>
+
+</select>
+
+<select id="condicao">
+
+<option>
+Novo
+</option>
+
+<option>
+Usado
+</option>
+
+</select>
+
+<input
+id="preco"
+placeholder="Preço">
+
+<input
+id="descricao"
+placeholder="Descrição">
+
+<input
+id="cidade_calcado"
+placeholder="Cidade">
+
+<input
+id="estado_calcado"
+placeholder="Estado">
+
+<input
+type="file"
+id="foto">
+
+<button
+class="btn-salvar"
+onclick="cadastrarCalcado()">
+
+Cadastrar Calçado
+
+</button>
+
+</div>
+
+</div>
+
+<!-- LISTA -->
+
+<div class="card">
+
+<h2>
+
+Calçados cadastrados
+
+</h2>
+
+<div
+class="lista"
+id="lista_calcados">
+
+Carregando...
+
+</div>
+
+</div>
+
+</div>
+
+<!-- VARIÁVEL GLOBAL -->
+
+<script>
+
+let paginaAtual = 'painel';
+
+</script>
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- CORE -->
+
+<script src="js/supabase.js"></script>
+
+<!-- COMPONENTES -->
+
+<script src="js/header.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/modal.js"></script>
+
+<script src="js/loader.js"></script>
+
+<!-- PÁGINA -->
+
+<script src="js/painel-admin.js"></script>
+
+</body>
+
+</html>

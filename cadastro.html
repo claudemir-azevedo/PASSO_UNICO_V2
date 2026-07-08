@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Cadastrar Calçado | PASSO ÚNICO
+</title>
+
+<!-- CSS -->
+
+<link
+rel="stylesheet"
+href="css/global.css">
+
+<link
+rel="stylesheet"
+href="css/components.css">
+
+<link
+rel="stylesheet"
+href="css/header.css">
+
+<link
+rel="stylesheet"
+href="css/toast.css">
+
+<link
+rel="stylesheet"
+href="css/modal.css">
+
+<link
+rel="stylesheet"
+href="css/cadastro.css">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div id="header-dinamico"></div>
+
+<!-- HERO -->
+
+<section class="cadastro-hero">
+
+<div class="hero-content">
+
+<div class="hero-badge">
+
+Impacto social • Plataforma colaborativa
+
+</div>
+
+<h1>
+
+Cadastre um novo passo
+para transformar vidas.
+
+</h1>
+
+<p>
+
+Adicione calçados disponíveis para doação,
+troca ou reaproveitamento e conecte pessoas
+através da solidariedade.
+
+</p>
+
+</div>
+
+</section>
+
+<!-- ÁREA -->
+
+<section class="cadastro-area">
+
+<div class="cadastro-container">
+
+<div class="cadastro-grid">
+
+<!-- FORM -->
+
+<div class="cadastro-card">
+
+<h2>
+
+Cadastrar calçado
+
+</h2>
+
+<p>
+
+Preencha as informações abaixo
+para disponibilizar o item na plataforma.
+
+</p>
+
+<div class="form-grid">
+
+<!-- TIPO -->
+
+<div class="form-group">
+
+<label>
+
+Tipo de calçado
+
+</label>
+
+<select id="tipo">
+
+<option value="">
+
+Selecione
+
+</option>
+
+<option value="Tênis">
+
+Tênis
+
+</option>
+
+<option value="Sapato">
+
+Sapato
+
+</option>
+
+<option value="Chinelo">
+
+Chinelo
+
+</option>
+
+<option value="Sandália">
+
+Sandália
+
+</option>
+
+<option value="Bota">
+
+Bota
+
+</option>
+
+</select>
+
+</div>
+
+<!-- NÚMERO -->
+
+<div class="form-group">
+
+<label>
+
+Número
+
+</label>
+
+<input
+type="number"
+id="numero"
+placeholder="Ex: 38">
+
+</div>
+
+<!-- CIDADE -->
+
+<div class="form-group">
+
+<label>
+
+Cidade
+
+</label>
+
+<input
+type="text"
+id="cidade"
+placeholder="Digite a cidade">
+
+</div>
+
+<!-- ESTADO -->
+
+<div class="form-group">
+
+<label>
+
+Estado (UF)
+
+</label>
+
+<input
+type="text"
+id="estado"
+placeholder="Ex: MG">
+
+</div>
+
+<!-- PÉ -->
+
+<div class="form-group">
+
+<label>
+
+Pé do calçado
+
+</label>
+
+<select id="pe">
+
+<option value="">
+
+Selecione
+
+</option>
+
+<option value="Direito">
+
+Direito
+
+</option>
+
+<option value="Esquerdo">
+
+Esquerdo
+
+</option>
+
+<option value="Par completo">
+
+Par completo
+
+</option>
+
+</select>
+
+</div>
+
+<!-- CONDIÇÃO -->
+
+<div class="form-group">
+
+<label>
+
+Condição
+
+</label>
+
+<select id="condicao">
+
+<option value="">
+
+Selecione
+
+</option>
+
+<option value="Novo">
+
+Novo
+
+</option>
+
+<option value="Seminovo">
+
+Seminovo
+
+</option>
+
+<option value="Usado">
+
+Usado
+
+</option>
+
+<option value="Precisa reparo">
+
+Precisa reparo
+
+</option>
+
+</select>
+
+</div>
+
+<!-- OBJETIVO -->
+
+<div class="form-group full">
+
+<label>
+
+Objetivo
+
+</label>
+
+<select id="objetivo">
+
+<option value="">
+
+Selecione
+
+</option>
+
+<option value="Doação">
+
+Doação
+
+</option>
+
+<option value="Troca">
+
+Troca
+
+</option>
+
+<option value="Venda solidária">
+
+Venda solidária
+
+</option>
+
+</select>
+
+</div>
+
+<!-- DESCRIÇÃO -->
+
+<div class="form-group full">
+
+<label>
+
+Descrição
+
+</label>
+
+<textarea
+id="descricao"
+placeholder="Descreva o estado do calçado, detalhes importantes e informações úteis."></textarea>
+
+</div>
+
+<!-- FOTO -->
+
+<div class="form-group full">
+
+<label>
+
+Foto do calçado
+
+</label>
+
+<input
+type="file"
+id="fotoCalcado"
+accept="image/*">
+
+</div>
+
+</div>
+
+<button
+class="btn-cadastrar"
+id="btnCadastrar">
+
+Cadastrar Calçado
+
+</button>
+
+<div
+id="statusCadastro"
+class="status-box">
+
+</div>
+
+</div>
+
+<!-- INFO -->
+
+<div class="info-card">
+
+<h3>
+
+Como funciona?
+
+</h3>
+
+<p>
+
+Depois do cadastro,
+o item ficará disponível
+para pessoas que procuram
+calçados específicos
+na plataforma.
+
+</p>
+
+<div class="info-lista">
+
+<div class="info-item">
+
+<div class="info-icon">
+
+👟
+
+</div>
+
+<div>
+
+<strong>
+
+Cadastro inteligente
+
+</strong>
+
+<span>
+
+Adicione informações claras
+para facilitar a busca.
+
+</span>
+
+</div>
+
+</div>
+
+<div class="info-item">
+
+<div class="info-icon">
+
+🤝
+
+</div>
+
+<div>
+
+<strong>
+
+Conexão social
+
+</strong>
+
+<span>
+
+Pessoas interessadas poderão
+entrar em contato diretamente.
+
+</span>
+
+</div>
+
+</div>
+
+<div class="info-item">
+
+<div class="info-icon">
+
+♻️
+
+</div>
+
+<div>
+
+<strong>
+
+Reaproveitamento
+
+</strong>
+
+<span>
+
+Reduza desperdício e ajude
+quem realmente precisa.
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- VARIÁVEL GLOBAL -->
+
+<script>
+
+let paginaAtual = 'cadastro';
+
+</script>
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- CORE -->
+
+<script src="js/supabase.js"></script>
+
+<!-- COMPONENTES -->
+
+<script src="js/header.js"></script>
+
+<script src="js/toast.js"></script>
+
+<script src="js/modal.js"></script>
+
+<script src="js/loader.js"></script>
+
+<!-- PÁGINA -->
+
+<script src="js/cadastro.js"></script>
+
+</body>
+
+</html>

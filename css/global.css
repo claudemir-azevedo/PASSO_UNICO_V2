@@ -1,0 +1,198 @@
+```css
+/* ===================================================== */
+/* GLOBAL.CSS */
+/* PASSO ÚNICO */
+/* ===================================================== */
+
+/* ===================================================== */
+/* RESET */
+/* ===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* ===================================================== */
+/* ROOT */
+/* ===================================================== */
+
+:root{
+
+    --primary:#2563eb;
+    --green:#22c55e;
+
+    --dark:#071133;
+    --text:#64748b;
+
+    --bg:#f8fafc;
+    --white:#ffffff;
+
+}
+
+/* ===================================================== */
+/* BODY */
+/* ===================================================== */
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:var(--bg);
+
+    color:var(--dark);
+
+    overflow-x:hidden;
+}
+
+/* ===================================================== */
+/* CONTAINER */
+/* ===================================================== */
+
+.container{
+
+    width:100%;
+    max-width:1320px;
+
+    margin:auto;
+
+    padding-left:32px;
+    padding-right:32px;
+}
+
+/* ===================================================== */
+/* LINKS */
+/* ===================================================== */
+
+a{
+
+    text-decoration:none;
+}
+
+/* ===================================================== */
+/* IMAGENS */
+/* ===================================================== */
+
+img{
+
+    max-width:100%;
+
+    display:block;
+}
+
+/* ===================================================== */
+/* BOTÃO PRINCIPAL */
+/* ===================================================== */
+
+.btn-primary{
+
+    height:58px;
+
+    padding:0 30px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--green),
+        var(--primary)
+    );
+
+    color:#fff;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    transition:.3s;
+}
+
+.btn-primary:hover{
+
+    transform:translateY(-3px);
+}
+
+/* ===================================================== */
+/* BOTÃO OUTLINE */
+/* ===================================================== */
+
+.btn-outline{
+
+    height:58px;
+
+    padding:0 30px;
+
+    border-radius:18px;
+
+    border:1px solid #dbe4f0;
+
+    background:#fff;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:var(--primary);
+
+    font-weight:700;
+}
+
+/* ===================================================== */
+/* SECTION LABEL */
+/* ===================================================== */
+
+.section-label{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:12px 20px;
+
+    border-radius:999px;
+
+    background:rgba(37,99,235,.08);
+
+    color:var(--primary);
+
+    font-size:13px;
+
+    font-weight:800;
+
+    letter-spacing:.08em;
+
+    margin-bottom:24px;
+}
+
+/* ===================================================== */
+/* RESPONSIVO */
+/* ===================================================== */
+
+@media(max-width:768px){
+
+    .container{
+
+        padding-left:24px;
+        padding-right:24px;
+    }
+
+    .btn-primary,
+    .btn-outline{
+
+        width:100%;
+    }
+
+}
+```

@@ -1,0 +1,49 @@
+/* ========================================
+TOAST
+======================================== */
+
+.toast{
+
+position:fixed;
+bottom:30px;
+right:30px;
+
+padding:16px 22px;
+
+border-radius:12px;
+
+font-size:15px;
+font-weight:600;
+
+color:#fff;
+
+opacity:0;
+transform:translateY(20px);
+
+transition:.3s ease;
+
+z-index:9999;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.18);
+
+}
+
+.toast.show{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+.toast.sucesso{
+
+background:#16a34a;
+
+}
+
+.toast.erro{
+
+background:#dc2626;
+
+}

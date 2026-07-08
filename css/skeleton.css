@@ -1,0 +1,136 @@
+/* ========================================
+ANIMAÇÃO
+======================================== */
+
+@keyframes skeletonLoading{
+
+0%{
+
+background-position:
+200% 0;
+
+}
+
+100%{
+
+background-position:
+-200% 0;
+
+}
+
+}
+
+
+/* ========================================
+BASE
+======================================== */
+
+.skeleton{
+
+background:
+linear-gradient(
+90deg,
+#e2e8f0 25%,
+#f1f5f9 50%,
+#e2e8f0 75%
+);
+
+background-size:
+200% 100%;
+
+animation:
+skeletonLoading 1.4s infinite linear;
+
+}
+
+
+/* ========================================
+CARD
+======================================== */
+
+.skeleton-card{
+
+background:white;
+
+border:
+1px solid #e2e8f0;
+
+border-radius:28px;
+
+overflow:hidden;
+
+}
+
+
+/* ========================================
+IMAGEM
+======================================== */
+
+.skeleton-image{
+
+height:260px;
+
+}
+
+
+/* ========================================
+CONTEÚDO
+======================================== */
+
+.skeleton-content{
+
+padding:24px;
+
+}
+
+
+/* ========================================
+LINHAS
+======================================== */
+
+.skeleton-line{
+
+height:14px;
+
+border-radius:999px;
+
+margin-bottom:14px;
+
+}
+
+.skeleton-line.large{
+
+height:28px;
+
+width:70%;
+
+margin-bottom:18px;
+
+}
+
+.skeleton-line.medium{
+
+width:50%;
+
+}
+
+.skeleton-line.small{
+
+width:35%;
+
+}
+
+
+/* ========================================
+BOTÃO
+======================================== */
+
+.skeleton-button{
+
+height:50px;
+
+border-radius:14px;
+
+margin-top:24px;
+
+}
