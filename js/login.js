@@ -1,224 +1,68 @@
-const form =
-document.getElementById(
-"form-login"
-);
+const form = document.getElementById("form-login");
+const btnLogin = document.querySelector(".btn-login-form");
 
-const btnLogin =
-document.querySelector(
-".btn-login"
-);
-
-
-/* ========================================
-SUBMIT
-======================================== */
-
-form?.addEventListener(
-"submit",
-async (event)=>{
-
-event.preventDefault();
-
-
-/* CAMPOS */
-
-const email =
-document
-.getElementById("email")
-?.value
-.trim();
-
-const senha =
-document
-.getElementById("senha")
-?.value
-.trim();
-
-
-/* VALIDAÇÃO */
-
-if(!email || !senha){
-
-mostrarToast(
-"Preencha todos os campos.",
-"erro"
-);
-
-return;
-
+function setLoading(loading) {
+  if (!btnLogin) return;
+  btnLogin.disabled = loading;
+  btnLogin.innerText = loading ? "Entrando..." : "Entrar";
 }
 
+form?.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-/* LOADING */
+  const email = document.getElementById("email")?.value.trim();
+  const senha = document.getElementById("senha")?.value;
 
-btnLogin.disabled = true;
+  if (!email || !senha) {
+    mostrarToast("Preencha e-mail e senha.", "erro");
+    return;
+  }
 
-btnLogin.innerText =
-"Entrando...";
+  setLoading(true);
 
+  try {
+    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+      email,
+      password: senha
+    });
 
-try{
+    if (error || !data.user) {
+      mostrarToast("E-mail ou senha inválidos.", "erro");
+      return;
+    }
 
+    const { data: usuario, error: usuarioError } = await window.supabaseClient
+      .from("usuarios")
+      .select("tipo_usuario")
+      .eq("id", data.user.id)
+      .maybeSingle();
 
-/* LOGIN */
+    if (usuarioError) {
+      console.error(usuarioError);
+      mostrarToast("Não foi possível carregar o seu perfil. Tente novamente.", "erro");
+      return;
+    }
 
-const {
-data,
-error
-} =
-await window.supabaseClient.auth.signInWithPassword({
+    if (!usuario?.tipo_usuario) {
+      mostrarToast("Perfil não encontrado. Entre em contato com o suporte.", "erro");
+      return;
+    }
 
-email,
-password: senha
+    mostrarToast("Login realizado com sucesso.", "sucesso");
 
+    window.setTimeout(() => {
+      if (usuario.tipo_usuario === "admin") {
+        window.location.href = "gerenciar.html";
+      } else if (usuario.tipo_usuario === "colaborador") {
+        window.location.href = "painel-colaborador.html";
+      } else {
+        window.location.href = "menu.html";
+      }
+    }, 500);
+  } catch (error) {
+    console.error(error);
+    mostrarToast("Não foi possível entrar agora. Tente novamente.", "erro");
+  } finally {
+    setLoading(false);
+  }
 });
-
-
-if(error){
-
-console.error(error);
-
-mostrarToast(
-"Email ou senha inválidos.",
-"erro"
-);
-
-btnLogin.disabled = false;
-
-btnLogin.innerText =
-"Entrar";
-
-return;
-
-}
-
-
-/* BUSCA USUÁRIO */
-
-const {
-data: usuario,
-error: usuarioError
-} =
-await window.supabaseClient
-.from("usuarios")
-.select("tipo_usuario")
-.eq(
-"id",
-data.user.id
-)
-.single();
-
-
-console.log(
-"USUARIO:",
-usuario
-);
-
-console.log(
-"ERRO USUARIO:",
-usuarioError
-);
-
-
-/* ERRO PERFIL */
-
-if(usuarioError){
-
-console.error(usuarioError);
-
-mostrarToast(
-"Erro ao carregar perfil.",
-"erro"
-);
-
-btnLogin.disabled = false;
-
-btnLogin.innerText =
-"Entrar";
-
-return;
-
-}
-
-
-/* PERFIL NÃO ENCONTRADO */
-
-if(!usuario){
-
-mostrarToast(
-"Usuário não encontrado.",
-"erro"
-);
-
-btnLogin.disabled = false;
-
-btnLogin.innerText =
-"Entrar";
-
-return;
-
-}
-
-
-/* SUCESSO */
-
-mostrarToast(
-"Login realizado com sucesso.",
-"sucesso"
-);
-
-
-/* REDIRECIONAMENTO */
-
-setTimeout(()=>{
-
-if(
-usuario.tipo_usuario === "admin"
-){
-
-window.location.href =
-"gerenciar.html";
-
-return;
-
-}
-
-
-if(
-usuario.tipo_usuario === "colaborador"
-){
-
-window.location.href =
-"painel-colaborador.html";
-
-return;
-
-}
-
-
-/* FALLBACK */
-
-window.location.href =
-"menu.html";
-
-},800);
-
-
-}catch(error){
-
-console.error(error);
-
-mostrarToast(
-"Erro inesperado ao entrar.",
-"erro"
-);
-
-btnLogin.disabled = false;
-
-btnLogin.innerText =
-"Entrar";
-
-}
-
-}
-);
