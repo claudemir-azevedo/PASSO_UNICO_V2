@@ -4,6 +4,10 @@ CLIENT
 
 const client = window.supabaseClient;
 
+if (!client) {
+    console.error("Supabase não inicializado.");
+}
+
 
 /* ========================================
 ELEMENTOS
@@ -140,11 +144,22 @@ try{
 /* SESSION */
 
 const {
-data: { session }
-} =
-await client
-.auth
-.getSession();
+    data,
+    error: sessionError
+} = await client.auth.getSession();
+
+if (sessionError) {
+
+    mostrarStatus(
+        "Erro ao verificar login.",
+        "erro"
+    );
+
+    return;
+
+}
+
+const session = data.session;
 
 
 if(!session){
@@ -289,6 +304,11 @@ mostrarToast(
 "sucesso"
 );
 
+console.log("Calçado cadastrado:", {
+    usuario: session.user.id,
+    numero,
+    tipo
+});
 
 /* ========================================
 LIMPAR CAMPOS

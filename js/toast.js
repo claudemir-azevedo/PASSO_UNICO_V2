@@ -2,44 +2,56 @@
 TOAST
 ======================================== */
 
-window.mostrarToast = function(
-mensagem,
-tipo = "sucesso"
-){
+window.mostrarToast = function (
+    mensagem,
+    tipo = "sucesso"
+) {
 
-const toast =
-document.createElement("div");
+    if (!mensagem) return;
 
-toast.className =
-`toast ${tipo}`;
+    const toastAnterior =
+    document.querySelector(".toast.show");
 
-toast.innerText =
-mensagem;
+    if (toastAnterior) {
 
-document.body.appendChild(toast);
+        toastAnterior.remove();
 
+    }
 
-/* ENTRADA */
+    const toast =
+    document.createElement("div");
 
-setTimeout(()=>{
+    toast.className =
+    `toast ${tipo}`;
 
-toast.classList.add("show");
+    toast.innerText =
+    mensagem;
 
-},100);
+    document.body.appendChild(toast);
 
+    requestAnimationFrame(() => {
 
-/* SAÍDA */
+        toast.classList.add("show");
 
-setTimeout(()=>{
+    });
 
-toast.classList.remove("show");
+    const tempoExibicao = 3000;
+    const tempoAnimacao = 300;
 
-setTimeout(()=>{
+    setTimeout(() => {
 
-toast.remove();
+        toast.classList.remove("show");
 
-},300);
+        setTimeout(() => {
 
-},3000);
+            if (toast.parentNode) {
+
+                toast.remove();
+
+            }
+
+        }, tempoAnimacao);
+
+    }, tempoExibicao);
 
 };

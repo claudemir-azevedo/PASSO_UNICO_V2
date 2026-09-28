@@ -641,11 +641,6 @@ box-shadow:
 
 }
 
-.btn-detalhes{
-    background:red !important;
-    color:white !important;
-    height:60px !important;
-}
 
 .btn-detalhes:hover{
 
@@ -656,11 +651,6 @@ box-shadow:
 
 }
 
-.btn-detalhes:hover{
-
-transform:translateY(-2px);
-
-}
 /* ========================================
 CARD PREMIUM
 ======================================== */
@@ -868,11 +858,6 @@ transition:.25s ease;
 
 }
 
-.btn-detalhes:hover{
-
-transform:translateY(-2px);
-
-}
 
 .btn-detalhes:hover{
 

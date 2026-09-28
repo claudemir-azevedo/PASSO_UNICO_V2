@@ -2,135 +2,44 @@
 HEADER DINÂMICO
 ======================================== */
 
-const header =
-document.getElementById(
-'header-dinamico'
-);
+const header = document.getElementById("header-dinamico");
 
-/* ========================================
-RENDER
-======================================== */
+const paginaAtualHeader = window.paginaAtual || "";
 
-if(header){
-
-header.innerHTML = `
-
+if (header) {
+    header.innerHTML = `
 <header class="header">
+    <div class="navbar">
 
-<div class="navbar">
+        <a href="index.html" class="logo">
+            <img src="assets/img/logo.png" alt="PASSO ÚNICO">
+        </a>
 
-<!-- LOGO -->
+        <nav class="nav-links">
+            <a href="index.html" class="${paginaAtualHeader === "index" ? "active" : ""}">Início</a>
+            <a href="buscar.html" class="${paginaAtualHeader === "buscar" ? "active" : ""}">Buscar</a>
+            <a href="parceiros.html" class="${paginaAtualHeader === "parceiros" ? "active" : ""}">Parceiros</a>
+            <a href="sobre.html" class="${paginaAtualHeader === "sobre" ? "active" : ""}">Sobre</a>
+        </nav>
 
-<a
-href="index.html"
-class="logo">
+        <div class="nav-actions">
+            <a href="login.html" class="btn-login">Entrar</a>
+            <a href="colaborar.html" class="btn-primary">Quero Colaborar</a>
+        </div>
 
-<img
-src="assets/img/logo.png"
-alt="PASSO ÚNICO">
-
-</a>
-
-<!-- MENU -->
-
-<nav class="nav-links">
-
-<a
-href="index.html"
-class="${
-paginaAtual === 'index'
-? 'active'
-: ''
-}">
-Início
-</a>
-
-<a
-href="buscar.html"
-class="${
-paginaAtual === 'buscar'
-? 'active'
-: ''
-}">
-Buscar
-</a>
-
-<a
-href="parceiros.html"
-class="${
-paginaAtual === 'parceiros'
-? 'active'
-: ''
-}">
-Parceiros
-</a>
-
-<a
-href="sobre.html"
-class="${
-paginaAtual === 'sobre'
-? 'active'
-: ''
-}">
-Sobre
-</a>
-
-</nav>
-
-<!-- BOTÕES -->
-
-<div class="nav-actions">
-
-<a
-href="login.html"
-class="btn-login">
-Entrar
-</a>
-
-<a
-href="colaborar.html"
-class="btn-primary">
-Quero Colaborar
-</a>
-
-</div>
-
-</div>
-
+    </div>
 </header>
-
 `;
-
 }
 
-/* ========================================
-SCROLL EFFECT
-======================================== */
+const siteHeader = document.querySelector(".header");
 
-window.addEventListener(
-'scroll',
-()=>{
+window.addEventListener("scroll", () => {
+    if (!siteHeader) return;
 
-const siteHeader =
-document.querySelector(
-'.header'
-);
-
-if(!siteHeader) return;
-
-if(window.scrollY > 40){
-
-siteHeader.classList.add(
-'scrolled'
-);
-
-}else{
-
-siteHeader.classList.remove(
-'scrolled'
-);
-
-}
-
-}
-);
+    if (window.scrollY > 40) {
+        siteHeader.classList.add("scrolled");
+    } else {
+        siteHeader.classList.remove("scrolled");
+    }
+});

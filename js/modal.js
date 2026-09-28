@@ -18,8 +18,6 @@ function abrirModal(conteudoHTML){
     overlay.className =
     "modal-overlay";
 
-    console.log(conteudoHTML);
-
     overlay.innerHTML = `
 
     <div class="modal">
@@ -109,8 +107,6 @@ DETALHES CALÇADO
 
 
 function abrirDetalhesCalcado(item){
-
-console.log("ABRIU MODAL", item);
 
 window.itemEdicao = item;
 
@@ -342,7 +338,7 @@ item.descricao ||
 
 <a
 href="${whatsappLink}"
-target="_blank"
+target="_blank" rel="noopener noreferrer"
 class="modal-whatsapp">
 
 Entrar em contato
@@ -387,7 +383,6 @@ telefone
 :
 "#";
 
-console.log(item);
 abrirModal(`
 
 <button
@@ -504,7 +499,7 @@ ${item.descricao || "Nenhuma descrição informada."}
 
 <a
 href="${whatsappLink}"
-target="_blank"
+target="_blank" rel="noopener noreferrer"
 class="modal-whatsapp">
 
 Entrar em contato
@@ -527,8 +522,6 @@ ABRIR EDIÇÃO
 ======================================== */
 
 function abrirEdicaoCalcado(item){
-console.log(item);
-console.log("ID DO ITEM:", item.id);
 abrirModal(`
 
 <button
@@ -812,8 +805,6 @@ async function salvarEdicaoCalcado(id){
 
 try{
 
-console.log("FUNÇÃO SALVAR EXECUTADA");
-
 const client =
 window.supabaseClient;
 
@@ -821,15 +812,7 @@ const {
     data: { user }
 } = await client.auth.getUser();
 
-console.log("USUÁRIO LOGADO:", user);
-
-console.log("ID RECEBIDO:", id);
-
-
 /* CAMPOS */
-
-console.log("MODAL:", document.querySelector(".modal-overlay"));
-console.log("STATUS:", document.getElementById("editStatus"));
 
 const status =
 document.getElementById(
@@ -899,10 +882,6 @@ descricao
 
 });
 
-console.log("CLIENTE:", client);
-
-alert("CHEGUEI NO UPDATE");
-
 try {
 
     const {
@@ -928,13 +907,8 @@ try {
     .eq("id", id)
     .select();
 
-    alert("SAÍ DO UPDATE");
-
     alert("ERRO = " + JSON.stringify(error));
     alert("DATA = " + JSON.stringify(data));
-
-    console.log("DATA:", data);
-    console.log("ERROR:", error);
 
 } catch (e) {
 
@@ -944,9 +918,6 @@ try {
     return;
 
 }
-
-console.log("UPDATE REALIZADO COM SUCESSO");
-
 
 mostrarToast(
 "Calçado atualizado com sucesso.",
@@ -1048,9 +1019,6 @@ try{
 const client =
 window.supabaseClient;
 
-console.log("CLIENTE:", client);
-
-
 const {
 error
 } =
@@ -1114,6 +1082,6 @@ window.abrirEdicaoCalcado = abrirEdicaoCalcado;
 window.abrirDetalhesPublico = abrirDetalhesPublico;
 window.salvarEdicaoCalcado = salvarEdicaoCalcado;
 
-window.salvarEdicaoCalcado = salvarEdicaoCalcado;
+
 window.confirmarRemocaoCalcado = confirmarRemocaoCalcado;
 window.removerCalcado = removerCalcado;

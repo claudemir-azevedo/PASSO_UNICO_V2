@@ -7,11 +7,23 @@ document.getElementById(
 'footer-dinamico'
 );
 
-if(footer){
+if (footer) {
 
     fetch('footer.html')
 
-    .then(response => response.text())
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Erro ${response.status}`
+            );
+
+        }
+
+        return response.text();
+
+    })
 
     .then(data => {
 
@@ -22,9 +34,15 @@ if(footer){
     .catch(error => {
 
         console.error(
-        'Erro ao carregar footer:',
-        error
+            'Erro ao carregar footer:',
+            error
         );
+
+        footer.innerHTML = `
+            <footer class="footer-erro">
+                Não foi possível carregar o rodapé.
+            </footer>
+        `;
 
     });
 

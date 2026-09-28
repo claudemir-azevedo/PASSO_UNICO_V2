@@ -16,6 +16,19 @@ setTimeout(resolve,100)
 const supabase =
 window.supabaseClient;
 
+const {
+    data: authData,
+    error: authError
+} = await supabase.auth.getUser();
+
+if (authError || !authData.user) {
+
+    window.location.href = "login.html";
+
+    return;
+
+}
+
 
 
 /* ========================================
@@ -81,6 +94,28 @@ error: erroUsuarios
 await supabase
 .from("usuarios")
 .select("*");
+
+const usuarioAtual =
+usuarios.find(
+u => u.id === authData.user.id
+);
+
+if (!usuarioAtual) {
+
+    window.location.href = "login.html";
+
+    return;
+
+}
+
+if (usuarioAtual.tipo_usuario !== "admin") {
+
+    window.location.href =
+    "painel-colaborador.html";
+
+    return;
+
+}
 
 console.log(
 "USUÁRIOS:",

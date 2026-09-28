@@ -1,186 +1,750 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <title>Painel do Colaborador | PASSO ÚNICO</title>
 
-<title>
-Painel do Colaborador | PASSO ÚNICO
-</title>
-
-<link
-rel="stylesheet"
-href="css/global.css">
-
-<link
-rel="stylesheet"
-href="css/components.css">
-
-<link
-rel="stylesheet"
-href="css/header.css">
-
-<link
-rel="stylesheet"
-href="css/toast.css">
-
-<link
-rel="stylesheet"
-href="css/modal.css">
-
-<link
-rel="stylesheet"
-href="css/painel-colaborador.css">
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/toast.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/painel-colaborador.css">
 
 </head>
 
 <body>
 
-<!-- HEADER -->
+    <!-- HEADER -->
+    <div id="header-dinamico"></div>
 
-<div id="header-dinamico"></div>
+    <main class="painel">
 
-<!-- PAINEL -->
+        <div class="painel-container">
 
-<main class="painel">
+            <!-- ===================================================== -->
+            <!-- HERO -->
+            <!-- ===================================================== -->
 
-<div class="painel-container">
+            <section class="painel-hero">
 
-<!-- TOPO -->
+                <div class="hero-info">
 
-<section class="painel-topo">
+                    <span class="hero-tag">
+                        Área do Colaborador
+                    </span>
 
-<div>
+                    <h1 id="saudacaoUsuario">
+                        Olá!
+                    </h1>
 
-<h1>
+                    <p>
+                        Aqui você acompanha todos os calçados cadastrados,
+                        visualiza o andamento das solicitações,
+                        realiza alterações sempre que necessário
+                        e acompanha o impacto das suas doações.
+                    </p>
 
-Meu painel
+                </div>
 
-</h1>
+                <div class="hero-acoes">
 
-<p>
+                    <a href="cadastro.html" class="btn-primary">
 
-Gerencie seus calçados cadastrados,
-acompanhe entregas e contribua para
-novas possibilidades através da plataforma.
+                        <i class="fa-solid fa-plus"></i>
 
-</p>
+                        Cadastrar Calçado
 
-</div>
+                    </a>
 
-<a
-href="cadastro.html"
-class="btn-novo">
+                    <button
+                        id="btnAtualizarPainel"
+                        class="btn-secondary">
 
-Cadastrar novo calçado
+                        <i class="fa-solid fa-rotate"></i>
 
-</a>
+                        Atualizar
 
-</section>
+                    </button>
 
-<!-- MÉTRICAS -->
+                </div>
 
-<section class="metricas">
+            </section>
 
-<div class="metrica-card">
+            <!-- ===================================================== -->
+            <!-- DASHBOARD -->
+            <!-- ===================================================== -->
 
-<span>
+            <section class="dashboard-cards">
 
-Calçados cadastrados
+                <article class="dashboard-card azul">
 
-</span>
+                    <div class="card-icon">
 
-<strong id="totalCalcados">
+                        <i class="fa-solid fa-shoe-prints"></i>
 
-0
+                    </div>
 
-</strong>
+                    <div class="card-info">
 
-</div>
+                        <span>Total de Calçados</span>
 
-<div class="metrica-card">
+                        <strong id="totalCalcados">
+                            0
+                        </strong>
 
-<span>
+                    </div>
 
-Disponíveis
+                </article>
 
-</span>
+                <article class="dashboard-card verde">
 
-<strong id="totalDisponiveis">
+                    <div class="card-icon">
 
-0
+                        <i class="fa-solid fa-circle-check"></i>
 
-</strong>
+                    </div>
 
-</div>
+                    <div class="card-info">
 
-<div class="metrica-card">
+                        <span>Disponíveis</span>
 
-<span>
+                        <strong id="totalDisponiveis">
+                            0
+                        </strong>
 
-Entregues
+                    </div>
 
-</span>
+                </article>
 
-<strong id="totalEntregues">
+                <article class="dashboard-card amarelo">
 
-0
+                    <div class="card-icon">
 
-</strong>
+                        <i class="fa-solid fa-handshake"></i>
 
-</div>
+                    </div>
 
-</section>
+                    <div class="card-info">
 
-<!-- LISTA -->
+                        <span>Entregues</span>
 
-<section
-class="lista-calcados"
-id="listaCalcados">
+                        <strong id="totalEntregues">
+                            0
+                        </strong>
 
-<!-- JS -->
+                    </div>
 
-</section>
+                </article>
 
-</div>
+                <article class="dashboard-card roxo">
 
-</main>
+                    <div class="card-icon">
 
-<!-- VARIÁVEL GLOBAL -->
+                        <i class="fa-solid fa-clock-rotate-left"></i>
 
-<script>
+                    </div>
 
-let paginaAtual = 'painel';
+                    <div class="card-info">
 
-</script>
+                        <span>Pendentes</span>
 
-<!-- SUPABASE -->
+                        <strong id="totalPendentes">
+                            0
+                        </strong>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+                    </div>
 
-<!-- CORE -->
+                </article>
 
-<script src="js/supabase.js"></script>
+            </section>
 
-<!-- COMPONENTES -->
+            <!-- ===================================================== -->
+            <!-- FERRAMENTAS -->
+            <!-- ===================================================== -->
 
-<script src="js/header.js"></script>
+            <section class="painel-filtros">
 
-<script src="js/toast.js"></script>
+                <div class="campo-busca">
 
-<script src="js/modal.js"></script>
+                    <i class="fa-solid fa-magnifying-glass"></i>
 
-<script src="js/loader.js"></script>
+                    <input
+                        type="text"
+                        id="campoBusca"
+                        placeholder="Pesquisar por modelo, marca, número ou cidade...">
 
-<!-- PÁGINA -->
+                </div>
 
-<script src="js/painel-colaborador.js"></script>
+                <div class="grupo-filtros">
+
+                    <select id="filtroStatus">
+
+                        <option value="">
+                            Todos os status
+                        </option>
+
+                        <option value="disponivel">
+                            Disponíveis
+                        </option>
+
+                        <option value="reservado">
+                            Reservados
+                        </option>
+
+                        <option value="entregue">
+                            Entregues
+                        </option>
+
+                    </select>
+
+                    <select id="ordenacao">
+
+                        <option value="recentes">
+                            Mais recentes
+                        </option>
+
+                        <option value="antigos">
+                            Mais antigos
+                        </option>
+
+                        <option value="numero">
+                            Número
+                        </option>
+
+                        <option value="marca">
+                            Marca
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </section>
+
+            <!-- ===================================================== -->
+            <!-- RESUMO -->
+            <!-- ===================================================== -->
+
+            <section class="painel-resumo">
+
+                <div class="painel-resumo-esquerda">
+
+                    <h2>
+                        Meus Calçados
+                    </h2>
+
+                    <p id="textoResumo">
+                        Carregando informações...
+                    </p>
+
+                </div>
+
+                <div class="painel-resumo-direita">
+
+                    <button
+                        id="btnAtualizarLista"
+                        class="btn-outline">
+
+                        Atualizar Lista
+
+                    </button>
+
+                </div>
+
+            </section>
+
+            <!-- ===================================================== -->
+            <!-- LOADER -->
+            <!-- ===================================================== -->
+
+            <section
+                id="loaderLista"
+                class="lista-loader">
+
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+
+            </section>
+
+            <!-- ===================================================== -->
+            <!-- EMPTY STATE -->
+            <!-- ===================================================== -->
+
+            <section
+                id="estadoVazio"
+                class="estado-vazio oculto">
+
+                <div class="estado-vazio-conteudo">
+
+                    <i class="fa-solid fa-box-open"></i>
+
+                    <h3>
+                        Nenhum calçado encontrado
+                    </h3>
+
+                    <p>
+
+                        Você ainda não possui calçados cadastrados
+                        ou nenhum resultado foi encontrado para os
+                        filtros selecionados.
+
+                    </p>
+
+                    <a
+                        href="cadastro.html"
+                        class="btn-primary">
+
+                        Cadastrar Primeiro Calçado
+
+                    </a>
+
+                </div>
+
+            </section>
+
+            <!-- ===================================================== -->
+            <!-- GRID DOS CALÇADOS -->
+            <!-- ===================================================== -->
+
+            <section
+                id="listaCalcados"
+                class="lista-calcados-grid">
+
+                <!-- preenchido via JS -->
+
+            </section>
+
+
+            <!-- ===================================================== -->
+            <!-- PAGINAÇÃO -->
+            <!-- ===================================================== -->
+
+            <section
+                id="paginacao"
+                class="paginacao oculto">
+
+                <button
+                    id="paginaAnterior"
+                    class="btn-paginacao">
+
+                    <i class="fa-solid fa-chevron-left"></i>
+
+                </button>
+
+                <div
+                    id="paginas"
+                    class="paginas">
+
+                </div>
+
+                <button
+                    id="proximaPagina"
+                    class="btn-paginacao">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </button>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- ===================================================== -->
+    <!-- MODAL DE DETALHES -->
+    <!-- ===================================================== -->
+
+    <div
+        id="modalDetalhes"
+        class="modal-custom oculto">
+
+        <div class="modal-box modal-detalhes">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="modal-tag">
+                        PASSO ÚNICO
+                    </span>
+
+                    <h2>
+                        Detalhes do Calçado
+                    </h2>
+
+                </div>
+
+                <button
+                    id="fecharModalDetalhes"
+                    class="btn-fechar">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+            <div
+                id="conteudoDetalhes"
+                class="modal-body">
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    id="btnEditarCalcado"
+                    class="btn-primary">
+
+                    Editar Cadastro
+
+                </button>
+
+                <button
+                    id="btnFecharDetalhes"
+                    class="btn-outline">
+
+                    Fechar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MODAL EXCLUSÃO -->
+    <!-- ===================================================== -->
+
+    <div
+        id="modalExcluir"
+        class="modal-custom oculto">
+
+        <div class="modal-box modal-confirmacao">
+
+            <div class="modal-header">
+
+                <h2>
+
+                    Confirmar Exclusão
+
+                </h2>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>
+
+                    Tem certeza que deseja excluir este cadastro?
+
+                </p>
+
+                <small>
+
+                    Esta ação não poderá ser desfeita.
+
+                </small>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    id="cancelarExclusao"
+                    class="btn-outline">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                    id="confirmarExclusao"
+                    class="btn-danger">
+
+                    Excluir Cadastro
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- MODAL EDIÇÃO -->
+    <!-- ===================================================== -->
+
+    <div
+        id="modalEdicao"
+        class="modal-custom oculto">
+
+        <div class="modal-box modal-edicao">
+
+            <div class="modal-header">
+
+                <h2>
+
+                    Editar Calçado
+
+                </h2>
+
+                <button
+                    id="fecharModalEdicao"
+                    class="btn-fechar">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+            <form
+                id="formEditarCalcado"
+                class="form-edicao">
+
+                <div class="grid-form">
+
+                    <div class="campo">
+
+                        <label>
+
+                            Marca
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editarMarca">
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label>
+
+                            Modelo
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editarModelo">
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label>
+
+                            Número
+
+                        </label>
+
+                        <input
+                            type="number"
+                            id="editarNumero">
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label>
+
+                            Pé
+
+                        </label>
+
+                        <select id="editarPe">
+
+                            <option value="esquerdo">
+
+                                Esquerdo
+
+                            </option>
+
+                            <option value="direito">
+
+                                Direito
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label>
+
+                            Estado
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editarEstado">
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label>
+
+                            Cidade
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="editarCidade">
+
+                    </div>
+
+                </div>
+
+                <div class="campo">
+
+                    <label>
+
+                        Observações
+
+                    </label>
+
+                    <textarea
+                        id="editarObservacoes"
+                        rows="5"></textarea>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        id="cancelarEdicao"
+                        class="btn-outline">
+
+                        Cancelar
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        id="salvarEdicao"
+                        class="btn-primary">
+
+                        Salvar Alterações
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================================== -->
+    <!-- MODAL DE IMAGEM -->
+    <!-- ===================================================== -->
+
+    <div
+        id="modalImagem"
+        class="modal-custom oculto">
+
+        <div class="modal-box modal-imagem">
+
+            <button
+                id="fecharImagem"
+                class="btn-fechar-imagem">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+            <img
+                id="imagemExpandida"
+                src=""
+                alt="Imagem do calçado">
+
+        </div>
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- TOAST -->
+    <!-- ===================================================== -->
+
+    <div id="toast-container"></div>
+
+    <!-- ===================================================== -->
+    <!-- LOADER GLOBAL -->
+    <!-- ===================================================== -->
+
+    <div
+        id="loaderGlobal"
+        class="loader-overlay oculto">
+
+        <div class="loader-spinner"></div>
+
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- VARIÁVEIS GLOBAIS -->
+    <!-- ===================================================== -->
+
+    <script>
+
+        let paginaAtual = "painel";
+
+    </script>
+
+    <!-- ===================================================== -->
+    <!-- SUPABASE -->
+    <!-- ===================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- ===================================================== -->
+    <!-- CORE -->
+    <!-- ===================================================== -->
+
+    <script src="js/supabase.js"></script>
+
+    <!-- ===================================================== -->
+    <!-- COMPONENTES -->
+    <!-- ===================================================== -->
+
+    <script src="js/header.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/loader.js"></script>
+
+    <!-- ===================================================== -->
+    <!-- FONT AWESOME -->
+    <!-- ===================================================== -->
+
+    <script src="https://kit.fontawesome.com/6d2a6b7d6d.js"
+            crossorigin="anonymous"></script>
+
+    <!-- ===================================================== -->
+    <!-- PÁGINA -->
+    <!-- ===================================================== -->
+
+    <script src="js/painel-colaborador.js"></script>
 
 </body>
 

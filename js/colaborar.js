@@ -4,6 +4,26 @@ CLIENT
 
 const client = window.supabaseClient;
 
+if (!client) {
+
+    console.error("Supabase não inicializado.");
+
+    window.location.href = "login.html";
+
+    throw new Error("Supabase não inicializado.");
+
+}
+
+if (!client) {
+
+    console.error("Supabase não inicializado.");
+
+    window.location.href = "login.html";
+
+    throw new Error("Supabase não inicializado.");
+
+}
+
 
 /* ========================================
 ELEMENTOS
@@ -84,11 +104,21 @@ ascending:false
 );
 
 
-if(error){
+if (error) {
 
-console.error(error);
+    console.error(error);
 
-return;
+    if (listaCalcados) {
+
+        listaCalcados.innerHTML = `
+            <div class="sem-calcados">
+                Erro ao carregar seus calçados.
+            </div>
+        `;
+
+    }
+
+    return;
 
 }
 
@@ -170,10 +200,11 @@ return;
 /* ========================================
 CARDS
 ======================================== */
+let html = "";
 
 calcados.forEach(item=>{
 
-listaCalcados.innerHTML += `
+html += `
 
 <div class="painel-card">
 
@@ -242,6 +273,7 @@ ${item.status || "-"}
 `;
 
 });
+listaCalcados.innerHTML = html;
 
 }
 
@@ -250,10 +282,22 @@ ${item.status || "-"}
 
 console.error(error);
 
-}
+if(listaCalcados){
+
+listaCalcados.innerHTML = `
+<div class="sem-calcados">
+
+Ocorreu um erro ao carregar o painel.
+
+</div>
+`;
 
 }
 
+}
+
+// Fecha a função carregarPainel()
+}
 
 /* ========================================
 INIT

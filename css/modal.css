@@ -32,7 +32,6 @@ fadeOverlay 0.25s ease;
 
 }
 
-
 /* ========================================
 MODAL PREMIUM
 ======================================== */
@@ -64,7 +63,6 @@ position:relative;
 
 }
 
-
 /* ========================================
 GRID
 ======================================== */
@@ -78,7 +76,6 @@ grid-template-columns:45% 55%;
 min-height:100%;
 
 }
-
 
 /* ========================================
 IMAGEM
@@ -116,7 +113,6 @@ display:block;
 
 }
 
-
 /* ========================================
 SEM IMAGEM
 ======================================== */
@@ -141,7 +137,6 @@ color:#94a3b8;
 
 }
 
-
 /* ========================================
 CONTEÚDO
 ======================================== */
@@ -157,7 +152,6 @@ display:flex;
 flex-direction:column;
 
 }
-
 
 /* ========================================
 FECHAR
@@ -201,7 +195,6 @@ box-shadow:
 
 }
 
-
 .modal-fechar:hover{
 
 transform:scale(1.05);
@@ -209,7 +202,6 @@ transform:scale(1.05);
 background:white;
 
 }
-
 
 /* ========================================
 TÍTULO
@@ -229,7 +221,6 @@ color:#0f172a;
 
 }
 
-
 /* ========================================
 BADGES
 ======================================== */
@@ -245,7 +236,6 @@ gap:10px;
 margin-bottom:28px;
 
 }
-
 
 .modal-badge{
 
@@ -266,7 +256,6 @@ font-weight:700;
 
 }
 
-
 .modal-badge.pe{
 
 background:#f1f5f9;
@@ -277,7 +266,6 @@ border:
 1px solid #dbe3ec;
 
 }
-
 
 .modal-badge.condicao{
 
@@ -290,7 +278,6 @@ border:
 
 }
 
-
 .modal-badge.objetivo{
 
 background:#ecfdf5;
@@ -301,7 +288,6 @@ border:
 1px solid #bbf7d0;
 
 }
-
 
 /* ========================================
 INFO
@@ -319,7 +305,6 @@ margin-bottom:18px;
 
 }
 
-
 .modal-item{
 
 display:flex;
@@ -335,7 +320,6 @@ border-bottom:
 
 }
 
-
 .modal-item span{
 
 font-size:12px;
@@ -350,7 +334,6 @@ color:#94a3b8;
 
 }
 
-
 .modal-item p{
 
 font-size:16px;
@@ -362,7 +345,6 @@ color:#334155;
 margin:0;
 
 }
-
 
 /* ========================================
 DESCRIÇÃO
@@ -376,7 +358,6 @@ margin-bottom:20px;
 
 }
 
-
 .modal-descricao h3{
 
 font-size:18px;
@@ -386,7 +367,6 @@ margin-bottom:14px;
 color:#0f172a;
 
 }
-
 
 .modal-descricao p{
 
@@ -416,7 +396,6 @@ margin-top:20px;
 width:100%;
 
 }
-
 
 /* ========================================
 BOTÃO WHATSAPP
@@ -453,7 +432,6 @@ box-shadow:
 
 }
 
-
 .modal-whatsapp:hover{
 
 background:#16a34a;
@@ -461,7 +439,6 @@ background:#16a34a;
 transform:translateY(-2px);
 
 }
-
 
 /* ========================================
 SCROLLBAR
@@ -473,7 +450,6 @@ width:8px;
 
 }
 
-
 .modal::-webkit-scrollbar-thumb{
 
 background:#cbd5e1;
@@ -481,7 +457,6 @@ background:#cbd5e1;
 border-radius:999px;
 
 }
-
 
 /* ========================================
 ANIMAÇÕES
@@ -502,7 +477,6 @@ opacity:1;
 }
 
 }
-
 
 @keyframes fadeModal{
 
@@ -527,7 +501,6 @@ scale(1);
 }
 
 }
-
 
 /* ========================================
 RESPONSIVO
@@ -568,7 +541,6 @@ font-size:34px;
 }
 
 }
-
 
 @media(max-width:700px){
 
@@ -665,7 +637,6 @@ box-shadow:
 0 12px 24px rgba(37,99,235,.20);
 
 }
-
 
 .btn-confirmar:hover{
 
