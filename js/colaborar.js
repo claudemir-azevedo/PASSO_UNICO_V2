@@ -5,23 +5,8 @@ CLIENT
 const client = window.supabaseClient;
 
 if (!client) {
-
     console.error("Supabase não inicializado.");
-
-    window.location.href = "login.html";
-
     throw new Error("Supabase não inicializado.");
-
-}
-
-if (!client) {
-
-    console.error("Supabase não inicializado.");
-
-    window.location.href = "login.html";
-
-    throw new Error("Supabase não inicializado.");
-
 }
 
 
@@ -29,285 +14,110 @@ if (!client) {
 ELEMENTOS
 ======================================== */
 
-const totalCalcados =
-document.getElementById(
-"totalCalcados"
-);
-
-const totalDisponiveis =
-document.getElementById(
-"totalDisponiveis"
-);
-
-const totalEntregues =
-document.getElementById(
-"totalEntregues"
-);
-
-const listaCalcados =
-document.getElementById(
-"listaCalcados"
-);
+const campoNome     = document.getElementById("cad_nome");
+const campoTelefone = document.getElementById("cad_telefone");
+const campoCidade   = document.getElementById("cad_cidade");
+const campoEstado   = document.getElementById("cad_estado");
+const campoEmail    = document.getElementById("cad_email");
+const campoSenha    = document.getElementById("cad_senha");
+const btnCadastrar  = document.getElementById("btnCadastrar");
+const msgCadastro   = document.getElementById("msgCadastro");
 
 
 /* ========================================
-CARREGAR PAINEL
+STATUS
 ======================================== */
 
-async function carregarPainel(){
+function mostrarStatus(mensagem, tipo) {
 
-try{
+    if (!msgCadastro) return;
 
-
-/* SESSION */
-
-const {
-data: { session }
-} =
-await client.auth.getSession();
-
-
-if(!session){
-
-window.location.href =
-"colaborar.html";
-
-return;
+    msgCadastro.innerText = mensagem;
+    msgCadastro.className = `status-box ${tipo}`;
 
 }
 
 
-const userId =
-session.user.id;
-
-
 /* ========================================
-BUSCA CALÇADOS
+CRIAR CONTA
 ======================================== */
 
-const {
-data: calcados,
-error
-} =
-await client
-.from("calcados")
-.select("*")
-.eq(
-"usuario_id",
-userId
-)
-.order(
-"created_at",
-{
-ascending:false
-}
-);
+btnCadastrar?.addEventListener("click", async (evento) => {
 
+    evento.preventDefault();
 
-if (error) {
+    const nome     = campoNome?.value.trim();
+    const telefone = campoTelefone?.value.trim();
+    const cidade   = campoCidade?.value.trim();
+    const estado   = campoEstado?.value;
+    const email    = campoEmail?.value.trim().toLowerCase();
+    const senha    = campoSenha?.value;
 
-    console.error(error);
+    if (!nome || !cidade || !estado || !email || !senha) {
+        mostrarStatus("Preencha nome, cidade, estado, e-mail e senha para continuar.", "erro");
+        return;
+    }
 
-    if (listaCalcados) {
+    if (senha.length < 6) {
+        mostrarStatus("A senha deve ter pelo menos 6 caracteres.", "erro");
+        return;
+    }
 
-        listaCalcados.innerHTML = `
-            <div class="sem-calcados">
-                Erro ao carregar seus calçados.
-            </div>
-        `;
+    btnCadastrar.disabled = true;
+    mostrarStatus("Criando sua conta...", "carregando");
+
+    try {
+
+        const { data: authData, error: authError } = await client.auth.signUp({
+
+            email,
+            password: senha,
+
+            options: {
+                data: {
+                    nome,
+                    telefone: telefone || null,
+                    cidade,
+                    estado
+                }
+            }
+
+        });
+
+        if (authError) throw authError;
+
+        if (!authData.user)
+            throw new Error("Usuário não criado.");
+
+        if (authData.user.identities && authData.user.identities.length === 0) {
+            mostrarStatus("Este e-mail já está cadastrado. Faça login.", "erro");
+            btnCadastrar.disabled = false;
+            return;
+        }
+
+        if (authData.session) {
+            mostrarStatus("Conta criada com sucesso! Redirecionando...", "sucesso");
+        } else {
+            mostrarStatus("Conta criada! Confirme seu e-mail para entrar.", "sucesso");
+        }
+
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 2000);
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        const mensagem =
+            erro.message?.includes("already registered") ||
+            erro.message?.includes("já está cadastrado")
+                ? "Este e-mail já está cadastrado. Faça login."
+                : "Não foi possível criar a conta. Tente novamente.";
+
+        mostrarStatus(mensagem, "erro");
+        btnCadastrar.disabled = false;
 
     }
 
-    return;
-
-}
-
-
-/* ========================================
-CONTADORES
-======================================== */
-
-const total =
-calcados.length;
-
-const disponiveis =
-calcados.filter(
-item =>
-item.status === "disponivel"
-).length;
-
-const entregues =
-calcados.filter(
-item =>
-item.status === "entregue"
-).length;
-
-
-/* ========================================
-INJECT
-======================================== */
-
-if(totalCalcados){
-
-totalCalcados.innerText =
-total;
-
-}
-
-if(totalDisponiveis){
-
-totalDisponiveis.innerText =
-disponiveis;
-
-}
-
-if(totalEntregues){
-
-totalEntregues.innerText =
-entregues;
-
-}
-
-
-/* ========================================
-LISTA
-======================================== */
-
-if(listaCalcados){
-
-listaCalcados.innerHTML = "";
-
-
-/* SEM ITENS */
-
-if(calcados.length === 0){
-
-listaCalcados.innerHTML = `
-
-<div class="sem-calcados">
-
-Nenhum calçado cadastrado ainda.
-
-</div>
-
-`;
-
-return;
-
-}
-
-
-/* ========================================
-CARDS
-======================================== */
-let html = "";
-
-calcados.forEach(item=>{
-
-html += `
-
-<div class="painel-card">
-
-${
-
-item.foto_url
-
-?
-
-`
-
-<img
-src="${item.foto_url}"
-alt="${item.tipo}">
-
-`
-
-:
-
-`
-
-<div class="painel-sem-imagem">
-
-Imagem não disponível
-
-</div>
-
-`
-
-}
-
-<div class="painel-card-conteudo">
-
-<h3>
-
-${item.tipo || "Calçado"}
-Nº ${item.numero || "-"}
-
-</h3>
-
-<p>
-
-<strong>Pé:</strong>
-${item.pe || "Não informado"}
-
-</p>
-
-<p>
-
-<strong>Condição:</strong>
-${item.condicao || "Não informado"}
-
-</p>
-
-<p>
-
-<strong>Status:</strong>
-${item.status || "-"}
-
-</p>
-
-</div>
-
-</div>
-
-`;
-
 });
-listaCalcados.innerHTML = html;
-
-}
-
-
-}catch(error){
-
-console.error(error);
-
-if(listaCalcados){
-
-listaCalcados.innerHTML = `
-<div class="sem-calcados">
-
-Ocorreu um erro ao carregar o painel.
-
-</div>
-`;
-
-}
-
-}
-
-// Fecha a função carregarPainel()
-}
-
-/* ========================================
-INIT
-======================================== */
-
-document.addEventListener(
-"DOMContentLoaded",
-()=>{
-
-carregarPainel();
-
-}
-);

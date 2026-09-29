@@ -365,24 +365,6 @@ Editar informações
 
 function abrirDetalhesPublico(item){
 
-const telefone =
-item.usuarios?.telefone || "";
-
-const mensagem =
-`Olá! Vi este calçado no PASSO ÚNICO:
-
-${item.tipo} Nº ${item.numero}
-${item.cidade} / ${item.estado}
-
-Ele ainda está disponível?`;
-
-const whatsappLink =
-telefone
-?
-`https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`
-:
-"#";
-
 abrirModal(`
 
 <button
@@ -497,14 +479,12 @@ ${item.descricao || "Nenhuma descrição informada."}
 
 <div class="modal-acoes">
 
-<a
-href="${whatsappLink}"
-target="_blank" rel="noopener noreferrer"
-class="modal-whatsapp">
-
+<button
+type="button"
+class="modal-whatsapp"
+onclick="entrarEmContato('${item.id}')">
 Entrar em contato
-
-</a>
+</button>
 
 </div>
 
@@ -516,6 +496,90 @@ Entrar em contato
 
 }
 
+
+/* ========================================
+CONTATO VIA WHATSAPP (somente logado)
+======================================== */
+
+async function entrarEmContato(calcadoId){
+
+    const item = (typeof calcados !== "undefined" && calcados.find(c => c.id === calcadoId)) || { id: calcadoId };
+
+    const client = window.supabaseClient;
+
+    // abre a aba já no clique para o navegador não bloquear o popup
+    const aba = window.open("", "_blank");
+
+    const avisar = (msg, tipo) => {
+        if (typeof mostrarToast === "function") {
+            mostrarToast(msg, tipo);
+        } else {
+            alert(msg);
+        }
+    };
+
+    try {
+
+        const { data: sessao } = await client.auth.getSession();
+
+        if (!sessao.session) {
+
+            if (aba) aba.close();
+
+            avisar("Entre na sua conta para falar com quem está doando.", "erro");
+
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1500);
+
+            return;
+
+        }
+
+        const { data, error } = await client.rpc("contato_calcado", {
+            p_calcado_id: item.id
+        });
+
+        if (error) throw error;
+
+        const contato = Array.isArray(data) ? data[0] : data;
+
+        if (!contato || !contato.telefone) {
+
+            if (aba) aba.close();
+
+            avisar("Este colaborador ainda não cadastrou um telefone de contato.", "erro");
+
+            return;
+
+        }
+
+        const mensagem =
+`Olá! Vi este calçado no PASSO ÚNICO:
+${item.tipo} Nº ${item.numero}
+${item.cidade || ""} / ${item.estado || ""}
+Ele ainda está disponível?`;
+
+        const link =
+            `https://wa.me/${contato.telefone}?text=${encodeURIComponent(mensagem)}`;
+
+        if (aba) {
+            aba.location.href = link;
+        } else {
+            window.location.href = link;
+        }
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        if (aba) aba.close();
+
+        avisar("Não foi possível abrir o contato. Tente novamente.", "erro");
+
+    }
+
+}
 
 /* ========================================
 ABRIR EDIÇÃO
