@@ -20,6 +20,20 @@ if (header) {
             <a href="buscar.html" class="${paginaAtualHeader === "buscar" ? "active" : ""}">Buscar</a>
             <a href="parceiros.html" class="${paginaAtualHeader === "parceiros" ? "active" : ""}">Parceiros</a>
             <a href="sobre.html" class="${paginaAtualHeader === "sobre" ? "active" : ""}">Sobre</a>
+
+            <div class="nav-dropdown">
+                <button type="button" class="nav-dropdown-toggle">
+                    Projeto
+                    <svg viewBox="0 0 12 8" width="10" height="7" fill="none" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+
+                <div class="nav-dropdown-menu">
+                    <a href="inclusao-social.html">Inclusão Social</a>
+                    <a href="sustentabilidade.html">Sustentabilidade</a>
+                    <a href="transparencia.html">Transparência</a>
+                    <a href="impacto-social.html">Impacto Social</a>
+                </div>
+            </div>
         </nav>
 
         <div class="nav-actions">
@@ -33,6 +47,24 @@ if (header) {
 }
 
 const siteHeader = document.querySelector(".header");
+
+const dropdownToggle = document.querySelector(".nav-dropdown-toggle");
+const dropdown = document.querySelector(".nav-dropdown");
+
+if (dropdownToggle && dropdown) {
+
+    dropdownToggle.addEventListener("click", (evento) => {
+        evento.stopPropagation();
+        dropdown.classList.toggle("open");
+    });
+
+    document.addEventListener("click", (evento) => {
+        if (!dropdown.contains(evento.target)) {
+            dropdown.classList.remove("open");
+        }
+    });
+
+}
 
 window.addEventListener("scroll", () => {
     if (!siteHeader) return;

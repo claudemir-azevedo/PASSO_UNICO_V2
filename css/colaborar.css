@@ -1,4 +1,3 @@
-```css
 /* ===================================================
 PASSO ÚNICO
 COLABORAR.CSS
@@ -608,6 +607,23 @@ INFO BOX
 
     color:#0f172a;
 }
+.info-box-title{
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.4;
+}
+.info-box-icon{
+
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.info-box-text{
+
+    margin: 0;
+}
 .impacto-box{
 
     margin-top:24px;
@@ -982,4 +998,3 @@ RESPONSIVO
 
 
 }
-```

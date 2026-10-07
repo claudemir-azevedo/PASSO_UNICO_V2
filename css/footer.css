@@ -152,6 +152,69 @@
 }
 
 /* ===================================================== */
+/* TITLE / CONTACT (colunas "Projeto" e "Contato") */
+/* ===================================================== */
+
+.footer-title {
+
+    color: #ffffff;
+
+    font-size: 18px;
+    font-weight: 800;
+
+    margin-bottom: 18px;
+}
+
+.footer-contact {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    color: rgba(255,255,255,.72);
+
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.footer-contact a {
+
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer-contact a:hover {
+
+    color: #ffffff;
+}
+
+.footer-instagram {
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-bottom-links {
+
+    display: flex;
+    gap: 20px;
+}
+
+.footer-bottom-links a {
+
+    color: rgba(255,255,255,.72);
+
+    text-decoration: none;
+}
+
+.footer-bottom-links a:hover {
+
+    color: #ffffff;
+}
+
+/* ===================================================== */
 /* BOTTOM */
 /* ===================================================== */
 
@@ -213,31 +276,6 @@
 
         width: 75px;
     }
-    .footer-title{
-
-    color:#ffffff;
-
-    font-size:18px;
-
-    font-weight:800;
-
-    margin-bottom:18px;
-
-}
-.footer-contact{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-
-    color:rgba(255,255,255,.72);
-
-    font-size:16px;
-
-    line-height:1.6;
-}
 
     .footer-brand p {
 

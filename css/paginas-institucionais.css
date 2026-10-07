@@ -1,0 +1,114 @@
+/* ===================================================== */
+/* PÁGINAS INSTITUCIONAIS                                 */
+/* Inclusão Social / Sustentabilidade /                   */
+/* Transparência / Impacto Social                         */
+/* ===================================================== */
+
+.pagina-hero {
+
+    padding: 160px 0 70px;
+
+    background: linear-gradient(135deg, #071133, #0f2a63);
+
+    color: #ffffff;
+}
+
+.pagina-hero .section-label {
+
+    display: inline-block;
+
+    margin-bottom: 18px;
+
+    padding: 8px 18px;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.1);
+
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.pagina-hero h1 {
+
+    max-width: 760px;
+
+    font-size: 44px;
+    line-height: 1.15;
+    font-weight: 800;
+
+    margin-bottom: 18px;
+}
+
+.pagina-hero p {
+
+    max-width: 620px;
+
+    font-size: 18px;
+    line-height: 1.7;
+
+    color: rgba(255,255,255,.8);
+}
+
+.pagina-conteudo {
+
+    padding: 70px 0;
+}
+
+.pagina-conteudo .container {
+
+    max-width: 860px;
+}
+
+.pagina-conteudo h2 {
+
+    font-size: 26px;
+    font-weight: 800;
+
+    color: #0f172a;
+
+    margin: 36px 0 14px;
+}
+
+.pagina-conteudo h2:first-child {
+
+    margin-top: 0;
+}
+
+.pagina-conteudo p {
+
+    font-size: 17px;
+    line-height: 1.8;
+
+    color: #475569;
+
+    margin-bottom: 14px;
+}
+
+.pagina-aviso {
+
+    margin-top: 40px;
+    padding: 22px 26px;
+
+    border-radius: 16px;
+    border-left: 5px solid #2563eb;
+
+    background: #f8fbff;
+
+    font-size: 15px;
+    line-height: 1.7;
+    color: #475569;
+}
+
+@media (max-width: 768px) {
+
+    .pagina-hero {
+        padding: 130px 0 50px;
+    }
+
+    .pagina-hero h1 {
+        font-size: 30px;
+    }
+}
