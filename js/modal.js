@@ -846,7 +846,7 @@ Cancelar
 
 <button
 class="btn-confirmar"
-onclick="alert('BOTÃO FUNCIONOU'); salvarEdicaoCalcado('${item.id}')">
+onclick="salvarEdicaoCalcado('${item.id}')">
 
 Salvar alterações
 
@@ -867,150 +867,76 @@ SALVAR EDIÇÃO
 
 async function salvarEdicaoCalcado(id){
 
-try{
+    try{
 
-const client =
-window.supabaseClient;
+        const client = window.supabaseClient;
 
-const {
-    data: { user }
-} = await client.auth.getUser();
+        const valor = (campo) =>
+            (document.getElementById(campo)?.value || "").trim();
 
-/* CAMPOS */
+        /* campos numéricos: vazio vira null (o banco não aceita texto vazio) */
 
-const status =
-document.getElementById(
-"editStatus"
-).value;
+        const numeroTexto = valor("editNumero");
+        const precoTexto = valor("editPreco").replace(",", ".");
 
-const condicao =
-document.getElementById(
-"editCondicao"
-).value;
+        const numero = numeroTexto === "" ? null : Number(numeroTexto);
+        const preco = precoTexto === "" ? null : Number(precoTexto);
 
-const objetivo =
-document.getElementById(
-"editObjetivo"
-).value;
+        if (numero !== null && Number.isNaN(numero)) {
+            mostrarToast("Número inválido.", "erro");
+            return;
+        }
 
-const descricao =
-document.getElementById(
-"editDescricao"
-).value;
+        if (preco !== null && Number.isNaN(preco)) {
+            mostrarToast("Preço inválido. Use apenas números (ex: 50 ou 49,90).", "erro");
+            return;
+        }
 
-const tipo =
-document.getElementById(
-"editTipo"
-).value;
+        const { data, error } = await client
+            .from("calcados")
+            .update({
+                tipo: valor("editTipo"),
+                numero,
+                pe: valor("editPe"),
+                cidade: valor("editCidade"),
+                estado: valor("editEstado"),
+                preco,
+                status: valor("editStatus"),
+                condicao: valor("editCondicao"),
+                objetivo: valor("editObjetivo"),
+                descricao: valor("editDescricao")
+            })
+            .eq("id", id)
+            .select();
 
-const numero =
-document.getElementById(
-"editNumero"
-).value;
+        if (error) {
+            console.error("Erro ao salvar calçado:", error);
+            mostrarToast("Não foi possível salvar as alterações.", "erro");
+            return;
+        }
 
-const pe =
-document.getElementById(
-"editPe"
-).value;
+        /* nenhuma linha alterada = sem permissão para editar este calçado */
 
-const cidade =
-document.getElementById(
-"editCidade"
-).value;
+        if (!data || data.length === 0) {
+            mostrarToast("Você não tem permissão para editar este calçado.", "erro");
+            return;
+        }
 
-const estado =
-document.getElementById(
-"editEstado"
-).value;
+        mostrarToast("Calçado atualizado com sucesso.", "sucesso");
 
-const preco =
-document.getElementById(
-"editPreco"
-).value;
+        fecharModal();
 
+        setTimeout(() => {
+            window.location.reload();
+        }, 600);
 
-/* UPDATE */
-console.log("DADOS ENVIADOS:", {
+    }catch(erro){
 
-tipo,
-numero,
-pe,
-cidade,
-estado,
-preco,
+        console.error(erro);
 
-status,
-condicao,
-objetivo,
-descricao
+        mostrarToast("Erro inesperado.", "erro");
 
-});
-
-try {
-
-    const {
-        data,
-        error
-    } = await client
-    .from("calcados")
-    .update({
-
-        tipo,
-        numero,
-        pe,
-        cidade,
-        estado,
-        preco,
-
-        status,
-        condicao,
-        objetivo,
-        descricao
-
-    })
-    .eq("id", id)
-    .select();
-
-    alert("ERRO = " + JSON.stringify(error));
-    alert("DATA = " + JSON.stringify(data));
-
-} catch (e) {
-
-    console.error("EXCEÇÃO DO SUPABASE:", e);
-    alert("EXCEÇÃO: " + e.message);
-
-    return;
-
-}
-
-mostrarToast(
-"Calçado atualizado com sucesso.",
-"sucesso"
-);
-
-
-fecharModal();
-
-
-/* RELOAD */
-
-setTimeout(()=>{
-
-window.location.reload();
-
-},500);
-
-
-}catch(error){
-
-console.error(error);
-
-mostrarToast(
-"Erro inesperado.",
-"erro"
-);
-
-}
+    }
 
 }
 

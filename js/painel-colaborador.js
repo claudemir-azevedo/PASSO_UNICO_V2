@@ -4,6 +4,9 @@
    Enterprise 3.0
 ========================================================== */
 
+/* cliente do Supabase criado em js/supabase.js */
+const supabase = window.supabaseClient;
+
 let usuarioAtual = null;
 let colaborador = null;
 
@@ -394,13 +397,13 @@ function aplicarFiltros() {
     calcadosFiltrados = calcados.filter(calcado => {
 
         const pesquisa = [
-
-            calcado.marca,
-            calcado.modelo,
+            calcado.tipo,
             calcado.numero,
             calcado.cidade,
-            calcado.estado
-
+            calcado.estado,
+            calcado.condicao,
+            calcado.objetivo,
+            calcado.descricao
         ]
 
         .join(" ")
@@ -537,161 +540,93 @@ function renderizarLista() {
    CARD
 ========================================================== */
 
+function escaparHtml(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
 function criarCard(calcado) {
 
-    const imagem =
+    const imagem = calcado.foto_url
+        ? `<img src="${escaparHtml(calcado.foto_url)}" alt="${escaparHtml(calcado.tipo)}" loading="lazy">`
+        : `<div class="calcado-sem-imagem">Sem imagem</div>`;
 
-        calcado.imagem ||
+    const statusClasse = `badge-${calcado.status}`;
 
-        "img/sem-imagem.jpg";
-
-    const statusClasse =
-
-        `badge-${calcado.status}`;
+    const descricao = calcado.descricao
+        ? escaparHtml(calcado.descricao).substring(0, 120)
+        : "Nenhuma descrição cadastrada.";
 
     return `
 
-<article
-class="calcado-card"
-data-id="${calcado.id}">
+<article class="calcado-card" data-id="${calcado.id}">
 
-<div class="calcado-imagem">
+    <div class="calcado-imagem">
 
-<img
-src="${imagem}"
-alt="${calcado.modelo}">
+        ${imagem}
 
-<span
-class="badge-status ${statusClasse}">
+        <span class="badge-status ${statusClasse}">
+            ${formatarStatus(calcado.status)}
+        </span>
 
-${formatarStatus(calcado.status)}
+    </div>
 
-</span>
+    <div class="calcado-body">
 
-</div>
+        <div class="calcado-header">
 
-<div class="calcado-body">
+            <div>
+                <h3>${escaparHtml(calcado.tipo) || "-"}</h3>
+            </div>
 
-<div class="calcado-header">
+            <div class="calcado-numero">
+                Nº ${escaparHtml(calcado.numero)}
+            </div>
 
-<div>
+        </div>
 
-<h3>
+        <div class="calcado-info">
 
-${calcado.marca || "-"}
+            <div class="info-item">
+                <span>Cidade</span>
+                <strong>${escaparHtml(calcado.cidade) || "-"}</strong>
+            </div>
 
-${calcado.modelo || ""}
+            <div class="info-item">
+                <span>Estado</span>
+                <strong>${escaparHtml(calcado.estado) || "-"}</strong>
+            </div>
 
-</h3>
+            <div class="info-item">
+                <span>Pé</span>
+                <strong>${escaparHtml(calcado.pe) || "-"}</strong>
+            </div>
 
-</div>
+            <div class="info-item">
+                <span>Objetivo</span>
+                <strong>${escaparHtml(calcado.objetivo) || "-"}</strong>
+            </div>
 
-<div class="calcado-numero">
+        </div>
 
-Nº ${calcado.numero}
+        <p class="calcado-descricao">${descricao}</p>
 
-</div>
+        <div class="calcado-acoes">
 
-</div>
+            <button class="btn-ver" data-id="${calcado.id}">Ver</button>
+            <button class="btn-editar" data-id="${calcado.id}">Editar</button>
+            <button class="btn-excluir" data-id="${calcado.id}">Excluir</button>
 
-<div class="calcado-info">
+        </div>
 
-<div class="info-item">
-
-<span>Cidade</span>
-
-<strong>
-
-${calcado.cidade || "-"}
-
-</strong>
-
-</div>
-
-<div class="info-item">
-
-<span>Estado</span>
-
-<strong>
-
-${calcado.estado || "-"}
-
-</strong>
-
-</div>
-
-<div class="info-item">
-
-<span>Pé</span>
-
-<strong>
-
-${calcado.pe || "-"}
-
-</strong>
-
-</div>
-
-<div class="info-item">
-
-<span>Status</span>
-
-<strong>
-
-${formatarStatus(calcado.status)}
-
-</strong>
-
-</div>
-
-</div>
-
-<p class="calcado-descricao">
-
-${
-
-(calcado.observacoes || "")
-
-.substring(0,120)
-
-}
-
-</p>
-
-<div class="calcado-acoes">
-
-<button
-class="btn-ver"
-data-id="${calcado.id}">
-
-Ver
-
-</button>
-
-<button
-class="btn-editar"
-data-id="${calcado.id}">
-
-Editar
-
-</button>
-
-<button
-class="btn-excluir"
-data-id="${calcado.id}">
-
-Excluir
-
-</button>
-
-</div>
-
-</div>
+    </div>
 
 </article>
 
 `;
-
 }
 
 /* ==========================================================
@@ -744,8 +679,8 @@ function renderizarPaginacao() {
 
     }
 
-    document.getElementById("paginaAnterior")
-        ?.onclick = () => {
+    const botaoAnterior = document.getElementById("paginaAnterior");
+    if (botaoAnterior) botaoAnterior.onclick = () => {
 
         if (paginaAtualGrid > 1) {
 
@@ -757,8 +692,8 @@ function renderizarPaginacao() {
 
     };
 
-    document.getElementById("proximaPagina")
-        ?.onclick = () => {
+    const botaoProxima = document.getElementById("proximaPagina");
+    if (botaoProxima) botaoProxima.onclick = () => {
 
         if (paginaAtualGrid < totalPaginas) {
 
@@ -828,103 +763,46 @@ function registrarEventosCards() {
 
 function abrirDetalhes(id) {
 
-    calcadoSelecionado =
-        calcados.find(c => c.id == id);
+    calcadoSelecionado = calcados.find(c => c.id == id);
 
     if (!calcadoSelecionado) return;
 
-    const corpo =
-        document.getElementById(
-            "conteudoDetalhes"
-        );
+    const c = calcadoSelecionado;
+
+    const preco = (c.preco !== null && c.preco !== undefined && c.preco !== "")
+        ? "R$ " + Number(c.preco).toLocaleString("pt-BR", { minimumFractionDigits: 2 })
+        : "-";
+
+    const corpo = document.getElementById("conteudoDetalhes");
 
     corpo.innerHTML = `
 
 <div class="detalhes-grid">
 
-<div>
-
-<strong>Marca</strong>
-
-<p>${calcadoSelecionado.marca || "-"}</p>
-
-</div>
-
-<div>
-
-<strong>Modelo</strong>
-
-<p>${calcadoSelecionado.modelo || "-"}</p>
-
-</div>
-
-<div>
-
-<strong>Número</strong>
-
-<p>${calcadoSelecionado.numero || "-"}</p>
-
-</div>
-
-<div>
-
-<strong>Pé</strong>
-
-<p>${calcadoSelecionado.pe || "-"}</p>
-
-</div>
-
-<div>
-
-<strong>Cidade</strong>
-
-<p>${calcadoSelecionado.cidade || "-"}</p>
-
-</div>
-
-<div>
-
-<strong>Estado</strong>
-
-<p>${calcadoSelecionado.estado || "-"}</p>
-
-</div>
-
-<div>
-
-<strong>Status</strong>
-
-<p>${formatarStatus(calcadoSelecionado.status)}</p>
-
-</div>
-
-<div>
-
-<strong>Cadastrado em</strong>
-
-<p>${formatarData(calcadoSelecionado.created_at)}</p>
-
-</div>
+    <div><strong>Tipo</strong><p>${escaparHtml(c.tipo) || "-"}</p></div>
+    <div><strong>Número</strong><p>${escaparHtml(c.numero) || "-"}</p></div>
+    <div><strong>Pé</strong><p>${escaparHtml(c.pe) || "-"}</p></div>
+    <div><strong>Condição</strong><p>${escaparHtml(c.condicao) || "-"}</p></div>
+    <div><strong>Objetivo</strong><p>${escaparHtml(c.objetivo) || "-"}</p></div>
+    <div><strong>Preço</strong><p>${preco}</p></div>
+    <div><strong>Cidade</strong><p>${escaparHtml(c.cidade) || "-"}</p></div>
+    <div><strong>Estado</strong><p>${escaparHtml(c.estado) || "-"}</p></div>
+    <div><strong>Status</strong><p>${formatarStatus(c.status)}</p></div>
+    <div><strong>Cadastrado em</strong><p>${formatarData(c.created_at)}</p></div>
 
 </div>
 
 <div class="mt-20">
 
-<strong>Observações</strong>
+    <strong>Descrição</strong>
 
-<p>
-
-${calcadoSelecionado.observacoes || "-"}
-
-</p>
+    <p>${escaparHtml(c.descricao) || "-"}</p>
 
 </div>
 
 `;
 
-    document
-        .getElementById("modalDetalhes")
-        .classList.remove("oculto");
+    document.getElementById("modalDetalhes").classList.remove("oculto");
 
 }
 
@@ -934,35 +812,12 @@ ${calcadoSelecionado.observacoes || "-"}
 
 function abrirEdicao(id) {
 
-    calcadoSelecionado =
-        calcados.find(c => c.id == id);
+    calcadoSelecionado = calcados.find(c => c.id == id);
 
     if (!calcadoSelecionado) return;
 
-    editarMarca.value =
-        calcadoSelecionado.marca || "";
-
-    editarModelo.value =
-        calcadoSelecionado.modelo || "";
-
-    editarNumero.value =
-        calcadoSelecionado.numero || "";
-
-    editarCidade.value =
-        calcadoSelecionado.cidade || "";
-
-    editarEstado.value =
-        calcadoSelecionado.estado || "";
-
-    editarPe.value =
-        calcadoSelecionado.pe || "";
-
-    editarObservacoes.value =
-        calcadoSelecionado.observacoes || "";
-
-    document
-        .getElementById("modalEdicao")
-        .classList.remove("oculto");
+    /* usa a mesma janela de edição do modal.js (campos reais da tabela) */
+    abrirEdicaoCalcado(calcadoSelecionado);
 
 }
 
