@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Seja um parceiro | PASSO ÚNICO</title>
+
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/footer.css">
+<link rel="stylesheet" href="css/toast.css">
+<link rel="stylesheet" href="css/paginas-institucionais.css">
+<link rel="stylesheet" href="css/parceria.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div id="header-dinamico"></div>
+
+<section class="pagina-hero">
+    <div class="container">
+
+        <span class="section-label">PARCERIAS INSTITUCIONAIS</span>
+
+        <h1>Vamos construir esse passo juntos.</h1>
+
+        <p>
+            Empresas, clínicas, hospitais, ONGs, escolas e órgãos públicos
+            podem fazer parte do PASSO ÚNICO. Conte quem você é e como
+            gostaria de colaborar — retornamos o contato pessoalmente.
+        </p>
+
+    </div>
+</section>
+
+<section class="parceria-secao">
+    <div class="container parceria-layout">
+
+        <!-- FORMULÁRIO -->
+
+        <div class="parceria-card" id="cardFormulario">
+
+            <form id="formParceria" novalidate>
+
+                <!-- campo isca contra robôs: pessoas não veem nem preenchem -->
+                <div class="campo-isca" aria-hidden="true">
+                    <label>Não preencha este campo</label>
+                    <input type="text" id="site_confirmacao" tabindex="-1" autocomplete="off">
+                </div>
+
+                <!-- 1. INSTITUIÇÃO -->
+
+                <fieldset>
+
+                    <legend><span class="num">1</span> Sobre a instituição</legend>
+
+                    <div class="grade">
+
+                        <div class="campo largo">
+                            <label for="organizacao">Nome da instituição ou empresa *</label>
+                            <input type="text" id="organizacao" maxlength="150" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="tipo_organizacao">Tipo de organização *</label>
+                            <select id="tipo_organizacao" required>
+                                <option value="">Selecione</option>
+                                <option>Empresa ou comércio</option>
+                                <option>Loja de calçados ou sapataria</option>
+                                <option>Clínica ou hospital</option>
+                                <option>ONG, associação ou instituto</option>
+                                <option>Escola ou universidade</option>
+                                <option>Órgão público</option>
+                                <option>Igreja ou grupo comunitário</option>
+                                <option>Startup ou tecnologia</option>
+                                <option>Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label for="cnpj">CNPJ <small>(se houver)</small></label>
+                            <input type="text" id="cnpj" inputmode="numeric" placeholder="00.000.000/0000-00" maxlength="18">
+                        </div>
+
+                        <div class="campo">
+                            <label for="cidade">Cidade *</label>
+                            <input type="text" id="cidade" maxlength="100" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="estado">Estado *</label>
+                            <select id="estado" required>
+                                <option value="">Selecione</option>
+                                <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+                                <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+                                <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+                                <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+                                <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                                <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+                                <option>SP</option><option>SE</option><option>TO</option>
+                            </select>
+                        </div>
+
+                        <div class="campo largo">
+                            <label for="site">Site ou Instagram <small>(opcional)</small></label>
+                            <input type="text" id="site" maxlength="200" placeholder="www.suaempresa.com.br ou @perfil">
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+                <!-- 2. RESPONSÁVEL -->
+
+                <fieldset>
+
+                    <legend><span class="num">2</span> Responsável pelo contato</legend>
+
+                    <div class="grade">
+
+                        <div class="campo">
+                            <label for="responsavel">Nome completo *</label>
+                            <input type="text" id="responsavel" maxlength="120" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="cargo">Cargo ou função</label>
+                            <input type="text" id="cargo" maxlength="100">
+                        </div>
+
+                        <div class="campo">
+                            <label for="email">E-mail *</label>
+                            <input type="email" id="email" maxlength="150" required>
+                        </div>
+
+                        <div class="campo">
+                            <label for="telefone">WhatsApp ou telefone *</label>
+                            <input type="tel" id="telefone" maxlength="20" placeholder="(31) 90000-0000" required>
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+                <!-- 3. PARCERIA -->
+
+                <fieldset>
+
+                    <legend><span class="num">3</span> Como gostaria de colaborar?</legend>
+
+                    <p class="dica">Marque uma ou mais opções.</p>
+
+                    <div class="opcoes" id="opcoesParceria">
+
+                        <label class="opcao"><input type="checkbox" name="tipos_parceria" value="Ponto de coleta"><span>Ser ponto de coleta de calçados</span></label>
+                        <label class="opcao"><input type="checkbox" name="tipos_parceria" value="Divulgação e indicação"><span>Divulgar e indicar o projeto às pessoas que atendemos</span></label>
+                        <label class="opcao"><input type="checkbox" name="tipos_parceria" value="Doação de calçados"><span>Doar calçados (novos, mostruário ou estoque parado)</span></label>
+                        <label class="opcao"><input type="checkbox" name="tipos_parceria" value="Apoio financeiro"><span>Apoio financeiro ou patrocínio</span></label>
+                        <label class="opcao"><input type="checkbox" name="tipos_parceria" value="Apoio técnico ou voluntariado"><span>Apoio técnico, profissional ou voluntariado</span></label>
+                        <label class="opcao"><input type="checkbox" name="tipos_parceria" value="Parceria institucional"><span>Parceria institucional ou convênio</span></label>
+                        <label class="opcao"><input type="checkbox" name="tipos_parceria" value="Outro"><span>Outra forma de colaborar</span></label>
+
+                    </div>
+
+                    <div class="campo largo">
+                        <label for="mensagem">Conte um pouco mais <small>(opcional)</small></label>
+                        <textarea id="mensagem" rows="5" maxlength="1500" placeholder="Qual é a sua ideia de parceria? Quantas pessoas vocês atendem? Há algum prazo ou necessidade específica?"></textarea>
+                        <span class="contador" id="contador">0 / 1500</span>
+                    </div>
+
+                    <div class="campo">
+                        <label for="como_conheceu">Como conheceu o PASSO ÚNICO? <small>(opcional)</small></label>
+                        <select id="como_conheceu">
+                            <option value="">Selecione</option>
+                            <option>Instagram</option>
+                            <option>Indicação de alguém</option>
+                            <option>Visita ou apresentação presencial</option>
+                            <option>Cartaz ou panfleto</option>
+                            <option>Notícia ou imprensa</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+
+                </fieldset>
+
+                <!-- CONSENTIMENTO -->
+
+                <label class="consentimento">
+                    <input type="checkbox" id="consentimento" required>
+                    <span>
+                        Autorizo o PASSO ÚNICO a usar os dados informados apenas para
+                        entrar em contato sobre esta proposta de parceria. *
+                    </span>
+                </label>
+
+                <div class="erro-form" id="erroForm" role="alert" hidden></div>
+
+                <button type="submit" class="btn-enviar" id="btnEnviar">
+                    Enviar proposta de parceria
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- SUCESSO -->
+
+        <div class="parceria-card sucesso" id="cardSucesso" hidden>
+
+            <div class="sucesso-icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+
+            <h2>Proposta recebida!</h2>
+
+            <p>
+                Obrigado por querer caminhar junto com a gente. Vamos analisar a
+                sua proposta e entrar em contato pelo e-mail ou WhatsApp informado.
+            </p>
+
+            <div class="proximos">
+                <div><strong>1.</strong> Analisamos a proposta</div>
+                <div><strong>2.</strong> Conversamos para alinhar os detalhes</div>
+                <div><strong>3.</strong> Formalizamos a parceria</div>
+            </div>
+
+            <a href="index.html" class="btn-voltar">Voltar ao início</a>
+
+        </div>
+
+        <!-- LATERAL -->
+
+        <aside class="parceria-lateral">
+
+            <div class="lateral-bloco">
+                <h3>O que acontece depois</h3>
+                <ol>
+                    <li>Recebemos a sua proposta no painel do projeto.</li>
+                    <li>Entramos em contato para conhecer a instituição.</li>
+                    <li>Combinamos juntos a melhor forma de colaborar.</li>
+                </ol>
+            </div>
+
+            <div class="lateral-bloco">
+                <h3>Prefere falar direto?</h3>
+                <p>
+                    <a href="https://wa.me/5531984764198" target="_blank" rel="noopener">WhatsApp (31) 98476-4198</a><br>
+                    <a href="mailto:clauazevedo@gmail.com">clauazevedo@gmail.com</a><br>
+                    <a href="https://instagram.com/meupassounico" target="_blank" rel="noopener">@meupassounico</a>
+                </p>
+            </div>
+
+            <div class="lateral-bloco discreto">
+                <p>
+                    O PASSO ÚNICO está em fase de lançamento. Os primeiros parceiros
+                    ajudam a definir como a rede vai funcionar e aparecem como
+                    parceiros fundadores.
+                </p>
+            </div>
+
+        </aside>
+
+    </div>
+</section>
+
+<div id="footer-dinamico"></div>
+
+<script>window.paginaAtual = "parceiros";</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/header.js"></script>
+<script src="js/footer.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/parceria.js"></script>
+
+</body>
+</html>
