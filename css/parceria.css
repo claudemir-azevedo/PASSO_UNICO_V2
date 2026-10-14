@@ -1,0 +1,513 @@
+/* ===================================================== */
+/* PARCERIA — formulário de proposta institucional        */
+/* ===================================================== */
+
+.parceria-secao {
+
+    padding: 56px 0 90px;
+}
+
+.parceria-layout {
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 32px;
+    align-items: start;
+}
+
+.parceria-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+
+    padding: 40px;
+
+    box-shadow: 0 12px 30px rgba(15, 23, 42, .05);
+}
+
+.parceria-card[hidden],
+.erro-form[hidden] {
+
+    display: none;
+}
+
+/* ---------- fieldsets ---------- */
+
+.parceria-card fieldset {
+
+    border: none;
+
+    padding: 0;
+    margin: 0 0 36px;
+}
+
+.parceria-card legend {
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 0 0 18px;
+    margin-bottom: 22px;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.parceria-card .num {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(135deg, var(--green), var(--primary));
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.dica {
+
+    margin: -6px 0 16px;
+
+    font-size: 14px;
+    color: var(--text);
+}
+
+/* ---------- campos ---------- */
+
+.grade {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.campo {
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    position: relative;
+}
+
+.campo.largo {
+
+    grid-column: 1 / -1;
+}
+
+.campo label {
+
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.campo label small {
+
+    font-weight: 500;
+    color: #94a3b8;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+
+    background: #ffffff;
+    color: var(--dark);
+
+    font-family: inherit;
+    font-size: 15px;
+
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.campo textarea {
+
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+
+    outline: none;
+
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, .14);
+}
+
+.campo.invalido input,
+.campo.invalido select,
+.campo.invalido textarea {
+
+    border-color: #dc2626;
+}
+
+.campo .msg-campo {
+
+    font-size: 13px;
+    font-weight: 600;
+    color: #dc2626;
+}
+
+.contador {
+
+    align-self: flex-end;
+
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* campo isca: fora da tela, invisível para pessoas */
+
+.campo-isca {
+
+    position: absolute;
+    left: -9999px;
+
+    width: 1px;
+    height: 1px;
+
+    overflow: hidden;
+}
+
+/* ---------- opções de parceria ---------- */
+
+.opcoes {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+
+    margin-bottom: 24px;
+}
+
+.opcao {
+
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    font-size: 14.5px;
+    line-height: 1.45;
+    color: #334155;
+
+    transition: border-color .2s, background .2s;
+}
+
+.opcao:hover {
+
+    border-color: #94a3b8;
+}
+
+.opcao input {
+
+    margin-top: 3px;
+
+    width: 18px;
+    height: 18px;
+
+    flex-shrink: 0;
+
+    accent-color: var(--primary);
+}
+
+.opcao:has(input:checked) {
+
+    border-color: var(--primary);
+    background: #eff6ff;
+}
+
+.opcoes.invalido .opcao {
+
+    border-color: #dc2626;
+}
+
+/* ---------- consentimento / envio ---------- */
+
+.consentimento {
+
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    margin: 8px 0 24px;
+    padding: 18px 20px;
+
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: #475569;
+
+    cursor: pointer;
+}
+
+.consentimento input {
+
+    margin-top: 3px;
+
+    width: 18px;
+    height: 18px;
+
+    flex-shrink: 0;
+
+    accent-color: var(--primary);
+}
+
+.erro-form {
+
+    margin-bottom: 18px;
+    padding: 14px 18px;
+
+    border-radius: 12px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #b91c1c;
+}
+
+.btn-enviar {
+
+    width: 100%;
+    height: 58px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: linear-gradient(90deg, var(--green), var(--primary));
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: transform .2s, box-shadow .2s, opacity .2s;
+}
+
+.btn-enviar:hover:not(:disabled) {
+
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(37, 99, 235, .25);
+}
+
+.btn-enviar:disabled {
+
+    opacity: .6;
+    cursor: wait;
+}
+
+/* ---------- sucesso ---------- */
+
+.sucesso {
+
+    text-align: center;
+    padding: 60px 40px;
+}
+
+.sucesso-icone {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 72px;
+    height: 72px;
+
+    margin-bottom: 22px;
+
+    border-radius: 50%;
+    background: #ecfdf5;
+    color: #16a34a;
+}
+
+.sucesso h2 {
+
+    font-size: 32px;
+    margin-bottom: 14px;
+}
+
+.sucesso p {
+
+    max-width: 480px;
+    margin: 0 auto 28px;
+
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text);
+}
+
+.proximos {
+
+    display: inline-flex;
+    flex-direction: column;
+    gap: 10px;
+
+    margin-bottom: 32px;
+    padding: 20px 28px;
+
+    border-radius: 14px;
+    background: #f8fafc;
+
+    text-align: left;
+    font-size: 15px;
+    color: #334155;
+}
+
+.proximos strong {
+
+    color: var(--primary);
+}
+
+.btn-voltar {
+
+    display: inline-flex;
+    align-items: center;
+
+    height: 50px;
+    padding: 0 28px;
+
+    border-radius: 12px;
+
+    background: var(--dark);
+    color: #ffffff;
+
+    font-weight: 700;
+}
+
+/* ---------- lateral ---------- */
+
+.parceria-lateral {
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    position: sticky;
+    top: 120px;
+}
+
+.lateral-bloco {
+
+    padding: 26px;
+
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+.lateral-bloco h3 {
+
+    margin-bottom: 14px;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.lateral-bloco ol {
+
+    padding-left: 20px;
+}
+
+.lateral-bloco li,
+.lateral-bloco p {
+
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--text);
+}
+
+.lateral-bloco li + li {
+
+    margin-top: 6px;
+}
+
+.lateral-bloco a {
+
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.lateral-bloco.discreto {
+
+    background: #f1f5f9;
+    border-color: transparent;
+}
+
+/* ---------- responsivo ---------- */
+
+@media (max-width: 1000px) {
+
+    .parceria-layout {
+
+        grid-template-columns: 1fr;
+    }
+
+    .parceria-lateral {
+
+        position: static;
+    }
+}
+
+@media (max-width: 640px) {
+
+    .parceria-secao {
+
+        padding: 32px 0 60px;
+    }
+
+    .parceria-card {
+
+        padding: 26px 20px;
+    }
+
+    .grade,
+    .opcoes {
+
+        grid-template-columns: 1fr;
+    }
+
+    .sucesso {
+
+        padding: 40px 20px;
+    }
+}
