@@ -26,3 +26,4 @@ jobs:
             echo "O Supabase não respondeu como esperado. Verifique se o projeto está pausado."
             exit 1
           fi
+
