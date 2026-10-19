@@ -10,20 +10,31 @@ on:
 
 jobs:
   ping:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Consultar o banco do Supabase
         env:
           SUPABASE_URL: https://cfwqfsenyjzsuckydppb.supabase.co
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          status=$(curl -s -o /dev/null -w "%{http_code}" \
-            "$SUPABASE_URL/rest/v1/calcados?select=id&limit=1" \
-            -H "apikey: $SUPABASE_ANON_KEY" \
-            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
-          echo "Resposta do Supabase: HTTP $status"
-          if [ "$status" != "200" ]; then
-            echo "O Supabase não respondeu como esperado. Verifique se o projeto está pausado."
+          # remove espaços e quebras de linha que podem vir junto ao colar a chave
+          KEY=$(printf '%s' "$SUPABASE_ANON_KEY" | tr -d '[:space:]')
+
+          if [ -z "$KEY" ]; then
+            echo "O secret SUPABASE_ANON_KEY está vazio ou não foi encontrado."
             exit 1
           fi
 
+          status=$(curl -s -o resposta.txt -w "%{http_code}" \
+            "$SUPABASE_URL/rest/v1/calcados?select=id&limit=1" \
+            -H "apikey: $KEY")
+
+          echo "Resposta do Supabase: HTTP $status"
+          echo "Corpo da resposta:"
+          cat resposta.txt
+          echo
+
+          if [ "$status" != "200" ]; then
+            echo "O Supabase não respondeu como esperado."
+            exit 1
+          fi
