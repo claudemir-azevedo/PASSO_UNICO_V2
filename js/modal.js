@@ -5,6 +5,69 @@ VERSÃO PREMIUM
 
 
 /* ========================================
+FUNÇÕES DE SEGURANÇA
+(evitam injeção de código por textos
+digitados pelos usuários)
+======================================== */
+
+/* escapa texto para uso dentro de HTML */
+
+function escaparHTML(valor){
+
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+}
+
+/* deixa passar só caracteres de um id (uuid) */
+
+function idSeguro(valor){
+
+    return String(valor ?? "").replace(/[^a-zA-Z0-9_-]/g, "");
+
+}
+
+/* aceita apenas endereços http(s) para imagens */
+
+function urlSegura(valor){
+
+    const url = String(valor ?? "").trim();
+
+    return /^https?:\/\//i.test(url) ? escaparHTML(url) : "";
+
+}
+
+/* monta o link do WhatsApp:
+   tira tudo que não é número e coloca 55 só quando faltar */
+
+function montarLinkWhatsapp(telefone, mensagem){
+
+    let numero = String(telefone ?? "").replace(/\D/g, "");
+
+    numero = numero.replace(/^0+/, "");
+
+    if(!numero){
+        return "";
+    }
+
+    if(!(numero.startsWith("55") && numero.length >= 12)){
+        numero = "55" + numero;
+    }
+
+    const texto = mensagem
+        ? `?text=${encodeURIComponent(mensagem)}`
+        : "";
+
+    return `https://wa.me/${numero}${texto}`;
+
+}
+
+
+/* ========================================
 ABRIR MODAL
 ======================================== */
 
@@ -45,11 +108,6 @@ function abrirModal(conteudoHTML){
     /* APPEND */
 
     document.body.appendChild(
-    overlay
-    );
-
-    console.log(
-    "OVERLAY CRIADO",
     overlay
     );
 
@@ -122,11 +180,9 @@ ${item.cidade} / ${item.estado}
 Ele ainda está disponível?`;
 
 const whatsappLink =
-telefone
-?
-`https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`
-:
-"#";
+montarLinkWhatsapp(telefone, mensagem) || "#";
+
+const fotoUrl = urlSegura(item.foto_url);
 
 
 abrirModal(`
@@ -148,15 +204,15 @@ onclick="fecharModal()">
 
 ${
 
-item.foto_url
+fotoUrl
 
 ?
 
 `
 
 <img
-src="${item.foto_url}"
-alt="${item.tipo}">
+src="${fotoUrl}"
+alt="${escaparHTML(item.tipo)}">
 
 `
 
@@ -183,13 +239,13 @@ Imagem não disponível
 
 <h1 class="modal-titulo">
 
-${item.tipo} Nº ${item.numero}
+${escaparHTML(item.tipo)} Nº ${escaparHTML(item.numero)}
 
 </h1>
 
 <div class="modal-status">
 
-${item.status || "disponivel"}
+${escaparHTML(item.status || "disponivel")}
 
 </div>
 
@@ -200,19 +256,19 @@ ${item.status || "disponivel"}
 
 <div class="modal-badge pe">
 
-${item.pe || "Não informado"}
+${escaparHTML(item.pe || "Não informado")}
 
 </div>
 
 <div class="modal-badge condicao">
 
-${item.condicao || "Não informado"}
+${escaparHTML(item.condicao || "Não informado")}
 
 </div>
 
 <div class="modal-badge objetivo">
 
-${item.objetivo || "Não informado"}
+${escaparHTML(item.objetivo || "Não informado")}
 
 </div>
 
@@ -233,7 +289,7 @@ Cidade
 
 <p>
 
-${item.cidade || "-"}
+${escaparHTML(item.cidade || "-")}
 
 </p>
 
@@ -250,7 +306,7 @@ Estado
 
 <p>
 
-${item.estado || "-"}
+${escaparHTML(item.estado || "-")}
 
 </p>
 
@@ -267,7 +323,7 @@ Colaborador
 
 <p>
 
-${item.usuarios?.nome || "Usuário"}
+${escaparHTML(item.usuarios?.nome || "Usuário")}
 
 </p>
 
@@ -283,7 +339,7 @@ E-mail
 
 <p>
 
-${item.usuarios?.email || "-"}
+${escaparHTML(item.usuarios?.email || "-")}
 
 </p>
 
@@ -299,7 +355,7 @@ Telefone
 
 <p>
 
-${item.usuarios?.telefone || "-"}
+${escaparHTML(item.usuarios?.telefone || "-")}
 
 </p>
 
@@ -320,12 +376,7 @@ Sobre o calçado
 
 <p>
 
-${
-
-item.descricao ||
-"Nenhuma descrição informada."
-
-}
+${escaparHTML(item.descricao || "Nenhuma descrição informada.")}
 
 </p>
 
@@ -337,7 +388,7 @@ item.descricao ||
 <div class="modal-acoes">
 
 <a
-href="${whatsappLink}"
+href="${escaparHTML(whatsappLink)}"
 target="_blank" rel="noopener noreferrer"
 class="modal-whatsapp">
 
@@ -347,7 +398,7 @@ Entrar em contato
 
 <button
 class="btn-confirmar"
-onclick='abrirEdicaoCalcado(${JSON.stringify(item)})'>
+onclick="abrirEdicaoCalcado(window.itemEdicao)">
 
 Editar informações
 
@@ -365,6 +416,8 @@ Editar informações
 
 function abrirDetalhesPublico(item){
 
+const fotoUrl = urlSegura(item.foto_url);
+
 abrirModal(`
 
 <button
@@ -380,15 +433,15 @@ onclick="fecharModal()">
 <div class="modal-imagem">
 
 ${
-item.foto_url
+fotoUrl
 
 ?
 
 `
 
 <img
-src="${item.foto_url}"
-alt="${item.tipo}">
+src="${fotoUrl}"
+alt="${escaparHTML(item.tipo)}">
 
 `
 
@@ -411,7 +464,7 @@ Imagem não disponível
 
 <h1 class="modal-titulo">
 
-${item.tipo} Nº ${item.numero}
+${escaparHTML(item.tipo)} Nº ${escaparHTML(item.numero)}
 
 </h1>
 
@@ -419,19 +472,19 @@ ${item.tipo} Nº ${item.numero}
 
 <div class="modal-badge pe">
 
-${item.pe || "Não informado"}
+${escaparHTML(item.pe || "Não informado")}
 
 </div>
 
 <div class="modal-badge condicao">
 
-${item.condicao || "Não informado"}
+${escaparHTML(item.condicao || "Não informado")}
 
 </div>
 
 <div class="modal-badge objetivo">
 
-${item.objetivo || "Não informado"}
+${escaparHTML(item.objetivo || "Não informado")}
 
 </div>
 
@@ -443,7 +496,7 @@ ${item.objetivo || "Não informado"}
 
 <span>Cidade</span>
 
-<p>${item.cidade || "-"}</p>
+<p>${escaparHTML(item.cidade || "-")}</p>
 
 </div>
 
@@ -451,7 +504,7 @@ ${item.objetivo || "Não informado"}
 
 <span>Estado</span>
 
-<p>${item.estado || "-"}</p>
+<p>${escaparHTML(item.estado || "-")}</p>
 
 </div>
 
@@ -459,7 +512,7 @@ ${item.objetivo || "Não informado"}
 
 <span>Colaborador</span>
 
-<p>${item.usuarios?.nome || "Usuário"}</p>
+<p>${escaparHTML(item.usuarios?.nome || "Usuário")}</p>
 
 </div>
 
@@ -471,7 +524,7 @@ ${item.objetivo || "Não informado"}
 
 <p>
 
-${item.descricao || "Nenhuma descrição informada."}
+${escaparHTML(item.descricao || "Nenhuma descrição informada.")}
 
 </p>
 
@@ -482,7 +535,7 @@ ${item.descricao || "Nenhuma descrição informada."}
 <button
 type="button"
 class="modal-whatsapp"
-onclick="entrarEmContato('${item.id}')">
+onclick="entrarEmContato('${idSeguro(item.id)}')">
 Entrar em contato
 </button>
 
@@ -560,8 +613,17 @@ ${item.tipo} Nº ${item.numero}
 ${item.cidade || ""} / ${item.estado || ""}
 Ele ainda está disponível?`;
 
-        const link =
-            `https://wa.me/${contato.telefone}?text=${encodeURIComponent(mensagem)}`;
+        const link = montarLinkWhatsapp(contato.telefone, mensagem);
+
+        if (!link) {
+
+            if (aba) aba.close();
+
+            avisar("Este colaborador ainda não cadastrou um telefone de contato.", "erro");
+
+            return;
+
+        }
 
         if (aba) {
             aba.location.href = link;
@@ -610,7 +672,7 @@ Editar calçado
 <input
 id="editTipo"
 type="text"
-value="${item.tipo || ''}">
+value="${escaparHTML(item.tipo)}">
 
 </div>
 
@@ -621,7 +683,7 @@ value="${item.tipo || ''}">
 <input
 id="editNumero"
 type="number"
-value="${item.numero || ''}">
+value="${escaparHTML(item.numero)}">
 
 </div>
 
@@ -663,7 +725,7 @@ Par
 <input
 id="editCidade"
 type="text"
-value="${item.cidade || ''}">
+value="${escaparHTML(item.cidade)}">
 
 </div>
 
@@ -674,7 +736,7 @@ value="${item.cidade || ''}">
 <input
 id="editEstado"
 type="text"
-value="${item.estado || ''}">
+value="${escaparHTML(item.estado)}">
 
 </div>
 
@@ -685,7 +747,7 @@ value="${item.estado || ''}">
 <input
 id="editPreco"
 type="number"
-value="${item.preco || ''}">
+value="${escaparHTML(item.preco)}">
 
 </div>
 
@@ -821,11 +883,7 @@ border:1px solid #dbe3ec;
 font-size:15px;
 font-family:Inter,sans-serif;
 resize:none;
-">
-
-${item.descricao || ""}
-
-</textarea>
+">${escaparHTML(item.descricao || "")}</textarea>
 
 </div>
 
@@ -846,7 +904,7 @@ Cancelar
 
 <button
 class="btn-confirmar"
-onclick="salvarEdicaoCalcado('${item.id}')">
+onclick="salvarEdicaoCalcado('${idSeguro(item.id)}')">
 
 Salvar alterações
 
@@ -983,7 +1041,7 @@ Cancelar
 
 <button
 class="btn-confirmar"
-onclick="removerCalcado('${id}')">
+onclick="removerCalcado('${idSeguro(id)}')">
 
 Remover
 
@@ -1075,3 +1133,10 @@ window.salvarEdicaoCalcado = salvarEdicaoCalcado;
 
 window.confirmarRemocaoCalcado = confirmarRemocaoCalcado;
 window.removerCalcado = removerCalcado;
+
+/* funções de apoio disponíveis para os outros scripts */
+
+window.escaparHTML = escaparHTML;
+window.idSeguro = idSeguro;
+window.urlSegura = urlSegura;
+window.montarLinkWhatsapp = montarLinkWhatsapp;

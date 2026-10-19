@@ -554,10 +554,12 @@ function criarCard(calcado) {
         ? `<img src="${escaparHtml(calcado.foto_url)}" alt="${escaparHtml(calcado.tipo)}" loading="lazy">`
         : `<div class="calcado-sem-imagem">Sem imagem</div>`;
 
-    const statusClasse = `badge-${calcado.status}`;
+    /* só letras, hífen e sublinhado entram no nome da classe */
+    const statusClasse = `badge-${String(calcado.status ?? "").replace(/[^a-zA-Z_-]/g, "")}`;
 
+    /* corta ANTES de escapar, para não partir um código como &amp; ao meio */
     const descricao = calcado.descricao
-        ? escaparHtml(calcado.descricao).substring(0, 120)
+        ? escaparHtml(String(calcado.descricao).substring(0, 120))
         : "Nenhuma descrição cadastrada.";
 
     return `
