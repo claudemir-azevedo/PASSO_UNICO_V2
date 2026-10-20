@@ -271,7 +271,7 @@ tabelaCalcados.innerHTML = `
 
 <td colspan="7">
 
-Nenhum calçado cadastrado.
+Nenhum item cadastrado.
 
 </td>
 

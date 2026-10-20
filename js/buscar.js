@@ -130,6 +130,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     montarSelectCategoria();
 
+    /* link vindo do carrossel/outras páginas: buscar.html?categoria=muleta */
+    const catUrl = new URLSearchParams(window.location.search).get("categoria");
+    if (campoCategoria && catUrl && Object.prototype.hasOwnProperty.call(CATEGORIAS, catUrl)) {
+        campoCategoria.value = catUrl;
+    }
+
     montarSelectTipo();
 
     carregarCalcados();
