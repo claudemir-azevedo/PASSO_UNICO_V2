@@ -9,6 +9,31 @@ let calcados = [];
 let calcadosFiltrados = [];
 
 /* ==========================================
+   SEGURANÇA
+   (evita injeção de código por textos
+   digitados pelos usuários)
+========================================== */
+
+function escaparTexto(valor) {
+
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+}
+
+function escaparUrlImagem(valor) {
+
+    const url = String(valor ?? "").trim();
+
+    return /^https?:\/\//i.test(url) ? escaparTexto(url) : "";
+
+}
+
+/* ==========================================
    ELEMENTOS
 ========================================== */
 
@@ -21,14 +46,80 @@ const contadorResultados =
 const formBusca =
     document.getElementById("formBusca");
 
+const campoCategoria =
+    document.getElementById("categoria");
+
 const campoCidade =
     document.getElementById("cidade");
 
 const campoNumero =
     document.getElementById("numero");
 
+const grupoNumero =
+    document.getElementById("grupoNumero");
+
 const campoTipo =
     document.getElementById("tipo");
+
+
+/* ==========================================
+   CATEGORIAS E TIPOS
+   (a lista vem de CATEGORIAS, em modal.js)
+========================================== */
+
+function montarSelectCategoria() {
+
+    if (!campoCategoria) return;
+
+    campoCategoria.innerHTML =
+        `<option value="">Todas</option>` +
+        Object.entries(CATEGORIAS)
+            .map(([chave, cfg]) =>
+                `<option value="${escaparTexto(chave)}">${escaparTexto(cfg.rotuloPlural)}</option>`
+            )
+            .join("");
+
+}
+
+/* refaz a lista de tipos conforme a categoria
+   e esconde o "Número", que só vale para calçados */
+
+function montarSelectTipo() {
+
+    const categoria = campoCategoria?.value || "";
+
+    if (campoTipo) {
+
+        const chaves = categoria
+            ? [categoria]
+            : Object.keys(CATEGORIAS);
+
+        const tipos = chaves.flatMap(chave => CATEGORIAS[chave].tipos);
+
+        campoTipo.innerHTML =
+            `<option value="">Todos</option>` +
+            tipos
+                .map(tipo =>
+                    `<option value="${escaparTexto(tipo)}">${escaparTexto(tipo)}</option>`
+                )
+                .join("");
+
+    }
+
+    if (grupoNumero) {
+
+        const mostrarNumero =
+            !categoria || CATEGORIAS[categoria].usaNumero;
+
+        grupoNumero.style.display = mostrarNumero ? "" : "none";
+
+        if (!mostrarNumero && campoNumero) {
+            campoNumero.value = "";
+        }
+
+    }
+
+}
 
 
 /* ==========================================
@@ -36,6 +127,10 @@ const campoTipo =
 ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    montarSelectCategoria();
+
+    montarSelectTipo();
 
     carregarCalcados();
 
@@ -58,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /* ==========================================
-   CARREGAR CALÇADOS
+   CARREGAR ITENS
 ========================================== */
 
 async function carregarCalcados() {
@@ -71,7 +166,7 @@ async function carregarCalcados() {
 
         listaCalcados.innerHTML = `
             <div class="loading">
-                Carregando calçados...
+                Carregando itens...
             </div>
         `;
 
@@ -98,13 +193,13 @@ async function carregarCalcados() {
     } catch (erro) {
 
         console.error(
-            "Erro ao carregar calçados:",
+            "Erro ao carregar itens:",
             erro
         );
 
         listaCalcados.innerHTML = `
             <div class="sem-resultados">
-                Não foi possível carregar os calçados.
+                Não foi possível carregar os itens.
             </div>
         `;
 
@@ -122,6 +217,9 @@ async function carregarCalcados() {
 
 function aplicarFiltros() {
 
+    const categoria =
+        campoCategoria?.value || "";
+
     const cidade =
         campoCidade.value
             .trim()
@@ -137,6 +235,10 @@ function aplicarFiltros() {
             .toLowerCase();
 
     calcadosFiltrados = calcados.filter(item => {
+
+        const categoriaOk =
+            !categoria ||
+            categoriaDe(item) === categoria;
 
         const cidadeOk =
             !cidade ||
@@ -154,6 +256,7 @@ function aplicarFiltros() {
                 .toLowerCase() === tipo;
 
         return (
+            categoriaOk &&
             cidadeOk &&
             numeroOk &&
             tipoOk
@@ -180,7 +283,9 @@ function atualizarContador() {
         calcadosFiltrados.length;
 
     contadorResultados.textContent =
-        `${total} calçado${total !== 1 ? "s" : ""} encontrado${total !== 1 ? "s" : ""}`;
+        total === 1
+            ? "1 item encontrado"
+            : `${total} itens encontrados`;
 
 }
 
@@ -194,7 +299,7 @@ function renderizarCalcados(lista) {
 
         listaCalcados.innerHTML = `
             <div class="sem-resultados">
-                <h3>Nenhum calçado encontrado</h3>
+                <h3>Nenhum item encontrado</h3>
                 <p>Tente alterar os filtros da pesquisa.</p>
             </div>
         `;
@@ -207,14 +312,18 @@ function renderizarCalcados(lista) {
 
     lista.forEach(item => {
 
+        const cfg = configCategoria(item);
+
         const card = document.createElement("article");
         card.className = "calcado-card";
 
-        const imagem = item.foto_url
+        const fotoUrl = escaparUrlImagem(item.foto_url);
+
+        const imagem = fotoUrl
             ? `
                 <img
-                    src="${item.foto_url}"
-                    alt="${item.tipo}"
+                    src="${fotoUrl}"
+                    alt="${escaparTexto(item.tipo)}"
                     loading="lazy"
                 >
             `
@@ -224,9 +333,49 @@ function renderizarCalcados(lista) {
                 </div>
             `;
 
-        const objetivo = item.objetivo || "Não informado";
-        const condicao = item.condicao || "Não informado";
-        const pe = item.pe || "Não informado";
+        const objetivo = escaparTexto(item.objetivo || "Não informado");
+        const condicao = escaparTexto(item.condicao || "Não informado");
+        const pe = escaparTexto(item.pe || "Não informado");
+
+        /* só calçados têm número */
+
+        const numero = cfg.usaNumero
+            ? `
+                    <span class="numero">
+                        Nº ${escaparTexto(item.numero)}
+                    </span>
+              `
+            : "";
+
+        /* "Pé" (calçado) ou "Quantidade" (muleta); cadeira não usa */
+
+        const badgePe = cfg.pe
+            ? `
+                    <span class="badge">
+                        ${pe}
+                    </span>
+              `
+            : "";
+
+        /* corta a descrição ANTES de escapar, para não partir um código como &amp; */
+
+        const descricaoBruta = item.descricao || "";
+
+        const descricao = descricaoBruta
+            ? escaparTexto(
+                descricaoBruta.length > 120
+                    ? descricaoBruta.substring(0, 120) + "..."
+                    : descricaoBruta
+            )
+            : "Nenhuma descrição cadastrada.";
+
+        const medidas = item.medidas
+            ? `
+                <p class="card-descricao">
+                    <strong>Medidas:</strong> ${escaparTexto(item.medidas)}
+                </p>
+              `
+            : "";
 
         card.innerHTML = `
 
@@ -239,20 +388,16 @@ function renderizarCalcados(lista) {
                 <div class="card-topo">
 
                     <h3>
-                        ${item.tipo}
+                        ${escaparTexto(item.tipo)}
                     </h3>
 
-                    <span class="numero">
-                        Nº ${item.numero}
-                    </span>
+                    ${numero}
 
                 </div>
 
                 <div class="card-badges">
 
-                    <span class="badge">
-                        ${pe}
-                    </span>
+                    ${badgePe}
 
                     <span class="badge">
                         ${condicao}
@@ -267,24 +412,20 @@ function renderizarCalcados(lista) {
                 <div class="card-local">
 
                     <strong>
-                        ${item.cidade || "-"}
+                        ${escaparTexto(item.cidade || "-")}
                     </strong>
 
                     <span>
-                        ${item.estado || "-"}
+                        ${escaparTexto(item.estado || "-")}
                     </span>
 
                 </div>
 
+                ${medidas}
+
                 <p class="card-descricao">
 
-                    ${
-                        item.descricao
-                            ? item.descricao.length > 120
-                                ? item.descricao.substring(0,120) + "..."
-                                : item.descricao
-                            : "Nenhuma descrição cadastrada."
-                    }
+                    ${descricao}
 
                 </p>
 
@@ -322,6 +463,16 @@ function renderizarCalcados(lista) {
    FILTROS EM TEMPO REAL
 ========================================== */
 
+if (campoCategoria) {
+    campoCategoria.addEventListener("change", () => {
+
+        montarSelectTipo();
+
+        aplicarFiltros();
+
+    });
+}
+
 if (campoCidade) {
     campoCidade.addEventListener("input", aplicarFiltros);
 }
@@ -341,9 +492,11 @@ if (campoTipo) {
 
 function limparFiltros() {
 
+    if (campoCategoria) campoCategoria.value = "";
     if (campoCidade) campoCidade.value = "";
     if (campoNumero) campoNumero.value = "";
-    if (campoTipo) campoTipo.value = "";
+
+    montarSelectTipo();
 
     calcadosFiltrados = [...calcados];
 

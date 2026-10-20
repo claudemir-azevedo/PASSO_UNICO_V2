@@ -11,7 +11,7 @@ name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <title>
-Cadastrar Calçado | PASSO ÚNICO
+Cadastrar item | PASSO ÚNICO
 </title>
 
 <!-- CSS -->
@@ -69,9 +69,11 @@ para transformar vidas.
 
 <p>
 
-Adicione calçados disponíveis para doação,
-troca ou reaproveitamento e conecte pessoas
-através da solidariedade.
+Adicione calçados, muletas ou cadeiras de rodas
+
+disponíveis para doação, troca ou venda solidária
+
+e conecte pessoas através da solidariedade.
 
 </p>
 
@@ -93,7 +95,7 @@ através da solidariedade.
 
 <h2>
 
-Cadastrar calçado
+Cadastrar item
 
 </h2>
 
@@ -106,61 +108,37 @@ para disponibilizar o item na plataforma.
 
 <div class="form-grid">
 
+<!-- CATEGORIA -->
+
+<div class="form-group full">
+
+<label>
+
+O que você quer cadastrar?
+
+</label>
+
+<select id="categoria"></select>
+
+</div>
+
 <!-- TIPO -->
 
 <div class="form-group">
 
-<label>
+<label id="lblTipo">
 
-Tipo de calçado
+Tipo
 
 </label>
 
-<select id="tipo">
-
-<option value="">
-
-Selecione
-
-</option>
-
-<option value="Tênis">
-
-Tênis
-
-</option>
-
-<option value="Sapato">
-
-Sapato
-
-</option>
-
-<option value="Chinelo">
-
-Chinelo
-
-</option>
-
-<option value="Sandália">
-
-Sandália
-
-</option>
-
-<option value="Bota">
-
-Bota
-
-</option>
-
-</select>
+<select id="tipo"></select>
 
 </div>
 
 <!-- NÚMERO -->
 
-<div class="form-group">
+<div class="form-group" id="grupoNumero">
 
 <label>
 
@@ -209,43 +187,35 @@ placeholder="Ex: MG">
 
 </div>
 
-<!-- PÉ -->
+<!-- PÉ / QUANTIDADE -->
 
-<div class="form-group">
+<div class="form-group" id="grupoPe">
 
-<label>
+<label id="lblPe">
 
 Pé do calçado
 
 </label>
 
-<select id="pe">
+<select id="pe"></select>
 
-<option value="">
+</div>
 
-Selecione
+<!-- MEDIDAS -->
 
-</option>
+<div class="form-group full" id="grupoMedidas" style="display:none">
 
-<option value="Direito">
+<label id="lblMedidas">
 
-Direito
+Medidas
 
-</option>
+</label>
 
-<option value="Esquerdo">
-
-Esquerdo
-
-</option>
-
-<option value="Par completo">
-
-Par completo
-
-</option>
-
-</select>
+<input
+type="text"
+id="medidas"
+maxlength="200"
+placeholder="">
 
 </div>
 
@@ -347,7 +317,7 @@ Descrição
 
 <textarea
 id="descricao"
-placeholder="Descreva o estado do calçado, detalhes importantes e informações úteis."></textarea>
+placeholder="Descreva o estado do item, detalhes importantes e informações úteis."></textarea>
 
 </div>
 
@@ -357,7 +327,7 @@ placeholder="Descreva o estado do calçado, detalhes importantes e informações
 
 <label>
 
-Foto do calçado
+Foto do item
 
 </label>
 
@@ -374,7 +344,7 @@ accept="image/*">
 class="btn-cadastrar"
 id="btnCadastrar">
 
-Cadastrar Calçado
+Cadastrar item
 
 </button>
 
@@ -401,7 +371,7 @@ Como funciona?
 Depois do cadastro,
 o item ficará disponível
 para pessoas que procuram
-calçados específicos
+itens específicos
 na plataforma.
 
 </p>

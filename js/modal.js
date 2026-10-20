@@ -68,6 +68,133 @@ function montarLinkWhatsapp(telefone, mensagem){
 
 
 /* ========================================
+CATEGORIAS DE ITENS
+(calçados, muletas, cadeiras de rodas)
+
+Para incluir uma categoria nova:
+1) acrescente o bloco abaixo
+2) libere o valor no banco (restrição
+   calcados_categoria_check na tabela calcados)
+
+  usaNumero  -> mostra o campo "Número" (só calçados)
+  pe         -> campo extra por categoria
+                (null = a categoria não usa)
+  medidas    -> campo livre de medidas
+                (null = a categoria não usa)
+======================================== */
+
+const CATEGORIAS = {
+
+    calcado: {
+        rotulo: "Calçado",
+        rotuloPlural: "Calçados",
+        tipos: ["Tênis", "Sapato", "Chinelo", "Sandália", "Bota"],
+        usaNumero: true,
+        pe: {
+            rotulo: "Pé do calçado",
+            rotuloCurto: "Pé",
+            opcoes: ["Direito", "Esquerdo", "Par completo"]
+        },
+        medidas: null
+    },
+
+    muleta: {
+        rotulo: "Muleta",
+        rotuloPlural: "Muletas",
+        tipos: ["Muleta axilar", "Muleta canadense"],
+        usaNumero: false,
+        pe: {
+            rotulo: "Quantidade",
+            rotuloCurto: "Quantidade",
+            opcoes: ["Par completo", "Unidade"]
+        },
+        medidas: {
+            rotulo: "Altura / tamanho",
+            placeholder: "Ex: ajustável de 1,50 m a 1,80 m"
+        }
+    },
+
+    cadeira_de_rodas: {
+        rotulo: "Cadeira de rodas",
+        rotuloPlural: "Cadeiras de rodas",
+        tipos: [
+            "Cadeira de rodas manual",
+            "Cadeira de rodas motorizada",
+            "Cadeira de banho"
+        ],
+        usaNumero: false,
+        pe: null,
+        medidas: {
+            rotulo: "Medidas",
+            placeholder: "Ex: assento de 40 cm, suporta até 100 kg"
+        }
+    }
+
+};
+
+/* itens antigos, sem categoria, contam como calçado */
+
+function categoriaDe(item){
+
+    return CATEGORIAS[item?.categoria] ? item.categoria : "calcado";
+
+}
+
+function configCategoria(item){
+
+    return CATEGORIAS[categoriaDe(item)];
+
+}
+
+/* ex.: "Tênis Nº 38" ou "Muleta axilar" */
+
+function tituloDoItem(item){
+
+    const cfg = configCategoria(item);
+
+    const tipo = item?.tipo || cfg.rotulo;
+
+    return cfg.usaNumero && item?.numero
+        ? `${tipo} Nº ${item.numero}`
+        : tipo;
+
+}
+
+function mensagemWhatsapp(item){
+
+    const local = [item?.cidade, item?.estado]
+        .filter(Boolean)
+        .join(" / ");
+
+    return `Olá! Vi este item no PASSO ÚNICO:
+
+${tituloDoItem(item)}${local ? "\n" + local : ""}
+
+Ele ainda está disponível?`;
+
+}
+
+/* <option> de um select; mantém o valor atual
+   mesmo que ele não esteja mais na lista */
+
+function opcoesSelect(opcoes, atual){
+
+    const lista = [...opcoes];
+
+    if(atual && !lista.includes(atual)){
+        lista.unshift(atual);
+    }
+
+    return lista
+        .map(o =>
+            `<option value="${escaparHTML(o)}" ${o === atual ? "selected" : ""}>${escaparHTML(o)}</option>`
+        )
+        .join("");
+
+}
+
+
+/* ========================================
 ABRIR MODAL
 ======================================== */
 
@@ -160,9 +287,63 @@ fecharModal();
 
 
 /* ========================================
-DETALHES CALÇADO
+PEDAÇOS DE HTML DOS DETALHES
 ======================================== */
 
+function htmlImagemItem(item){
+
+    const fotoUrl = urlSegura(item.foto_url);
+
+    return fotoUrl
+        ? `<img src="${fotoUrl}" alt="${escaparHTML(item.tipo)}">`
+        : `<div class="modal-sem-imagem">Imagem não disponível</div>`;
+
+}
+
+function htmlBadgesItem(item){
+
+    const cfg = configCategoria(item);
+
+    return `
+
+<div class="modal-badges">
+
+${
+cfg.pe
+? `<div class="modal-badge pe">${escaparHTML(item.pe || "Não informado")}</div>`
+: ""
+}
+
+<div class="modal-badge condicao">${escaparHTML(item.condicao || "Não informado")}</div>
+
+<div class="modal-badge objetivo">${escaparHTML(item.objetivo || "Não informado")}</div>
+
+</div>
+
+`;
+
+}
+
+function htmlInfoItem(rotulo, valor){
+
+    return `
+
+<div class="modal-item">
+
+<span>${escaparHTML(rotulo)}</span>
+
+<p>${escaparHTML(valor)}</p>
+
+</div>
+
+`;
+
+}
+
+
+/* ========================================
+DETALHES (colaborador e administrador)
+======================================== */
 
 function abrirDetalhesCalcado(item){
 
@@ -171,18 +352,8 @@ window.itemEdicao = item;
 const telefone =
 item.usuarios?.telefone || "";
 
-const mensagem =
-`Olá! Vi este calçado no PASSO ÚNICO:
-
-${item.tipo} Nº ${item.numero}
-${item.cidade} / ${item.estado}
-
-Ele ainda está disponível?`;
-
 const whatsappLink =
-montarLinkWhatsapp(telefone, mensagem) || "#";
-
-const fotoUrl = urlSegura(item.foto_url);
+montarLinkWhatsapp(telefone, mensagemWhatsapp(item)) || "#";
 
 
 abrirModal(`
@@ -202,33 +373,7 @@ onclick="fecharModal()">
 
 <div class="modal-imagem">
 
-${
-
-fotoUrl
-
-?
-
-`
-
-<img
-src="${fotoUrl}"
-alt="${escaparHTML(item.tipo)}">
-
-`
-
-:
-
-`
-
-<div class="modal-sem-imagem">
-
-Imagem não disponível
-
-</div>
-
-`
-
-}
+${htmlImagemItem(item)}
 
 </div>
 
@@ -239,7 +384,7 @@ Imagem não disponível
 
 <h1 class="modal-titulo">
 
-${escaparHTML(item.tipo)} Nº ${escaparHTML(item.numero)}
+${escaparHTML(tituloDoItem(item))}
 
 </h1>
 
@@ -252,114 +397,26 @@ ${escaparHTML(item.status || "disponivel")}
 
 <!-- BADGES -->
 
-<div class="modal-badges">
-
-<div class="modal-badge pe">
-
-${escaparHTML(item.pe || "Não informado")}
-
-</div>
-
-<div class="modal-badge condicao">
-
-${escaparHTML(item.condicao || "Não informado")}
-
-</div>
-
-<div class="modal-badge objetivo">
-
-${escaparHTML(item.objetivo || "Não informado")}
-
-</div>
-
-</div>
+${htmlBadgesItem(item)}
 
 
 <!-- INFO -->
 
 <div class="modal-info">
 
-<div class="modal-item">
+${htmlInfoItem("Categoria", configCategoria(item).rotulo)}
 
-<span>
+${htmlInfoItem("Cidade", item.cidade || "-")}
 
-Cidade
+${htmlInfoItem("Estado", item.estado || "-")}
 
-</span>
+${item.medidas ? htmlInfoItem("Medidas", item.medidas) : ""}
 
-<p>
+${htmlInfoItem("Colaborador", item.usuarios?.nome || "Usuário")}
 
-${escaparHTML(item.cidade || "-")}
+${htmlInfoItem("E-mail", item.usuarios?.email || "-")}
 
-</p>
-
-</div>
-
-
-<div class="modal-item">
-
-<span>
-
-Estado
-
-</span>
-
-<p>
-
-${escaparHTML(item.estado || "-")}
-
-</p>
-
-</div>
-
-
-<div class="modal-item">
-
-<span>
-
-Colaborador
-
-</span>
-
-<p>
-
-${escaparHTML(item.usuarios?.nome || "Usuário")}
-
-</p>
-
-</div>
-
-<div class="modal-item">
-
-<span>
-
-E-mail
-
-</span>
-
-<p>
-
-${escaparHTML(item.usuarios?.email || "-")}
-
-</p>
-
-</div>
-
-<div class="modal-item">
-
-<span>
-
-Telefone
-
-</span>
-
-<p>
-
-${escaparHTML(item.usuarios?.telefone || "-")}
-
-</p>
-
-</div>
+${htmlInfoItem("Telefone", item.usuarios?.telefone || "-")}
 
 </div>
 
@@ -370,7 +427,7 @@ ${escaparHTML(item.usuarios?.telefone || "-")}
 
 <h3>
 
-Sobre o calçado
+Sobre o item
 
 </h3>
 
@@ -414,9 +471,12 @@ Editar informações
 
 }
 
-function abrirDetalhesPublico(item){
 
-const fotoUrl = urlSegura(item.foto_url);
+/* ========================================
+DETALHES (visitantes)
+======================================== */
+
+function abrirDetalhesPublico(item){
 
 abrirModal(`
 
@@ -432,31 +492,7 @@ onclick="fecharModal()">
 
 <div class="modal-imagem">
 
-${
-fotoUrl
-
-?
-
-`
-
-<img
-src="${fotoUrl}"
-alt="${escaparHTML(item.tipo)}">
-
-`
-
-:
-
-`
-
-<div class="modal-sem-imagem">
-
-Imagem não disponível
-
-</div>
-
-`
-}
+${htmlImagemItem(item)}
 
 </div>
 
@@ -464,63 +500,29 @@ Imagem não disponível
 
 <h1 class="modal-titulo">
 
-${escaparHTML(item.tipo)} Nº ${escaparHTML(item.numero)}
+${escaparHTML(tituloDoItem(item))}
 
 </h1>
 
-<div class="modal-badges">
-
-<div class="modal-badge pe">
-
-${escaparHTML(item.pe || "Não informado")}
-
-</div>
-
-<div class="modal-badge condicao">
-
-${escaparHTML(item.condicao || "Não informado")}
-
-</div>
-
-<div class="modal-badge objetivo">
-
-${escaparHTML(item.objetivo || "Não informado")}
-
-</div>
-
-</div>
+${htmlBadgesItem(item)}
 
 <div class="modal-info">
 
-<div class="modal-item">
+${htmlInfoItem("Categoria", configCategoria(item).rotulo)}
 
-<span>Cidade</span>
+${htmlInfoItem("Cidade", item.cidade || "-")}
 
-<p>${escaparHTML(item.cidade || "-")}</p>
+${htmlInfoItem("Estado", item.estado || "-")}
 
-</div>
+${item.medidas ? htmlInfoItem("Medidas", item.medidas) : ""}
 
-<div class="modal-item">
-
-<span>Estado</span>
-
-<p>${escaparHTML(item.estado || "-")}</p>
-
-</div>
-
-<div class="modal-item">
-
-<span>Colaborador</span>
-
-<p>${escaparHTML(item.usuarios?.nome || "Usuário")}</p>
-
-</div>
+${htmlInfoItem("Colaborador", item.usuarios?.nome || "Usuário")}
 
 </div>
 
 <div class="modal-descricao">
 
-<h3>Sobre o calçado</h3>
+<h3>Sobre o item</h3>
 
 <p>
 
@@ -607,13 +609,7 @@ async function entrarEmContato(calcadoId){
 
         }
 
-        const mensagem =
-`Olá! Vi este calçado no PASSO ÚNICO:
-${item.tipo} Nº ${item.numero}
-${item.cidade || ""} / ${item.estado || ""}
-Ele ainda está disponível?`;
-
-        const link = montarLinkWhatsapp(contato.telefone, mensagem);
+        const link = montarLinkWhatsapp(contato.telefone, mensagemWhatsapp(item));
 
         if (!link) {
 
@@ -645,9 +641,30 @@ Ele ainda está disponível?`;
 
 /* ========================================
 ABRIR EDIÇÃO
+(os campos mudam conforme a categoria)
 ======================================== */
 
 function abrirEdicaoCalcado(item){
+
+const cfg = configCategoria(item);
+
+const statusLista = [
+    ["disponivel", "Disponível"],
+    ["entregue", "Entregue"]
+];
+
+/* mantém um status diferente (ex.: reservado) sem sobrescrevê-lo */
+
+if(item.status && !statusLista.some(s => s[0] === item.status)){
+    statusLista.push([item.status, item.status]);
+}
+
+const opcoesStatus = statusLista
+    .map(([valor, rotulo]) =>
+        `<option value="${escaparHTML(valor)}" ${item.status === valor ? "selected" : ""}>${escaparHTML(rotulo)}</option>`
+    )
+    .join("");
+
 abrirModal(`
 
 <button
@@ -662,20 +679,25 @@ onclick="fecharModal()">
 
 <h2 class="modal-titulo">
 
-Editar calçado
+Editar ${escaparHTML(cfg.rotulo.toLowerCase())}
 
 </h2>
+
 <div class="modal-item">
 
 <span>Tipo</span>
 
-<input
-id="editTipo"
-type="text"
-value="${escaparHTML(item.tipo)}">
+<select id="editTipo">
+
+${opcoesSelect(cfg.tipos, item.tipo)}
+
+</select>
 
 </div>
 
+${
+cfg.usaNumero
+? `
 <div class="modal-item">
 
 <span>Número</span>
@@ -686,37 +708,46 @@ type="number"
 value="${escaparHTML(item.numero)}">
 
 </div>
+`
+: ""
+}
 
+${
+cfg.pe
+? `
 <div class="modal-item">
 
-<span>Pé</span>
+<span>${escaparHTML(cfg.pe.rotuloCurto)}</span>
 
 <select id="editPe">
 
-<option value="Direito"
-${item.pe === "Direito" ? "selected" : ""}>
-
-Direito
-
-</option>
-
-<option value="Esquerdo"
-${item.pe === "Esquerdo" ? "selected" : ""}>
-
-Esquerdo
-
-</option>
-
-<option value="Par"
-${item.pe === "Par" ? "selected" : ""}>
-
-Par
-
-</option>
+${opcoesSelect(cfg.pe.opcoes, item.pe)}
 
 </select>
 
 </div>
+`
+: ""
+}
+
+${
+cfg.medidas
+? `
+<div class="modal-item">
+
+<span>${escaparHTML(cfg.medidas.rotulo)}</span>
+
+<input
+id="editMedidas"
+type="text"
+maxlength="200"
+placeholder="${escaparHTML(cfg.medidas.placeholder)}"
+value="${escaparHTML(item.medidas)}">
+
+</div>
+`
+: ""
+}
 
 <div class="modal-item">
 
@@ -767,19 +798,7 @@ Status
 
 <select id="editStatus">
 
-<option value="disponivel"
-${item.status === "disponivel" ? "selected" : ""}>
-
-Disponível
-
-</option>
-
-<option value="entregue"
-${item.status === "entregue" ? "selected" : ""}>
-
-Entregue
-
-</option>
+${opcoesStatus}
 
 </select>
 
@@ -796,33 +815,7 @@ Condição
 
 <select id="editCondicao">
 
-<option value="Novo"
-${item.condicao === "Novo" ? "selected" : ""}>
-
-Novo
-
-</option>
-
-<option value="Seminovo"
-${item.condicao === "Seminovo" ? "selected" : ""}>
-
-Seminovo
-
-</option>
-
-<option value="Usado"
-${item.condicao === "Usado" ? "selected" : ""}>
-
-Usado
-
-</option>
-
-<option value="Precisa reparo"
-${item.condicao === "Precisa reparo" ? "selected" : ""}>
-
-Precisa reparo
-
-</option>
+${opcoesSelect(["Novo", "Seminovo", "Usado", "Precisa reparo"], item.condicao)}
 
 </select>
 
@@ -839,26 +832,7 @@ Objetivo
 
 <select id="editObjetivo">
 
-<option value="Doação"
-${item.objetivo === "Doação" ? "selected" : ""}>
-
-Doação
-
-</option>
-
-<option value="Troca"
-${item.objetivo === "Troca" ? "selected" : ""}>
-
-Troca
-
-</option>
-
-<option value="Venda solidária"
-${item.objetivo === "Venda solidária" ? "selected" : ""}>
-
-Venda solidária
-
-</option>
+${opcoesSelect(["Doação", "Troca", "Venda solidária"], item.objetivo)}
 
 </select>
 
@@ -929,58 +903,80 @@ async function salvarEdicaoCalcado(id){
 
         const client = window.supabaseClient;
 
+        const existe = (campo) =>
+            document.getElementById(campo) !== null;
+
         const valor = (campo) =>
             (document.getElementById(campo)?.value || "").trim();
 
         /* campos numéricos: vazio vira null (o banco não aceita texto vazio) */
 
-        const numeroTexto = valor("editNumero");
         const precoTexto = valor("editPreco").replace(",", ".");
 
-        const numero = numeroTexto === "" ? null : Number(numeroTexto);
         const preco = precoTexto === "" ? null : Number(precoTexto);
-
-        if (numero !== null && Number.isNaN(numero)) {
-            mostrarToast("Número inválido.", "erro");
-            return;
-        }
 
         if (preco !== null && Number.isNaN(preco)) {
             mostrarToast("Preço inválido. Use apenas números (ex: 50 ou 49,90).", "erro");
             return;
         }
 
+        const dados = {
+            tipo: valor("editTipo"),
+            cidade: valor("editCidade"),
+            estado: valor("editEstado"),
+            preco,
+            status: valor("editStatus"),
+            condicao: valor("editCondicao"),
+            objetivo: valor("editObjetivo"),
+            descricao: valor("editDescricao")
+        };
+
+        /* só envia o que existe no formulário da categoria,
+           para não apagar campos de outra categoria */
+
+        if (existe("editNumero")) {
+
+            const numeroTexto = valor("editNumero");
+
+            const numero = numeroTexto === "" ? null : Number(numeroTexto);
+
+            if (numero !== null && Number.isNaN(numero)) {
+                mostrarToast("Número inválido.", "erro");
+                return;
+            }
+
+            dados.numero = numero;
+
+        }
+
+        if (existe("editPe")) {
+            dados.pe = valor("editPe");
+        }
+
+        if (existe("editMedidas")) {
+            dados.medidas = valor("editMedidas") || null;
+        }
+
         const { data, error } = await client
             .from("calcados")
-            .update({
-                tipo: valor("editTipo"),
-                numero,
-                pe: valor("editPe"),
-                cidade: valor("editCidade"),
-                estado: valor("editEstado"),
-                preco,
-                status: valor("editStatus"),
-                condicao: valor("editCondicao"),
-                objetivo: valor("editObjetivo"),
-                descricao: valor("editDescricao")
-            })
+            .update(dados)
             .eq("id", id)
             .select();
 
         if (error) {
-            console.error("Erro ao salvar calçado:", error);
+            console.error("Erro ao salvar item:", error);
             mostrarToast("Não foi possível salvar as alterações.", "erro");
             return;
         }
 
-        /* nenhuma linha alterada = sem permissão para editar este calçado */
+        /* nenhuma linha alterada = sem permissão para editar este item */
 
         if (!data || data.length === 0) {
-            mostrarToast("Você não tem permissão para editar este calçado.", "erro");
+            mostrarToast("Você não tem permissão para editar este item.", "erro");
             return;
         }
 
-        mostrarToast("Calçado atualizado com sucesso.", "sucesso");
+        mostrarToast("Item atualizado com sucesso.", "sucesso");
 
         fecharModal();
 
@@ -1011,7 +1007,7 @@ abrirModal(`
 
 <h2 class="modal-titulo">
 
-Remover calçado?
+Remover item?
 
 </h2>
 
@@ -1084,7 +1080,7 @@ if(error){
 console.error(error);
 
 mostrarToast(
-"Erro ao remover calçado.",
+"Erro ao remover item.",
 "erro"
 );
 
@@ -1094,7 +1090,7 @@ return;
 
 
 mostrarToast(
-"Calçado removido com sucesso.",
+"Item removido com sucesso.",
 "sucesso"
 );
 
@@ -1140,3 +1136,10 @@ window.escaparHTML = escaparHTML;
 window.idSeguro = idSeguro;
 window.urlSegura = urlSegura;
 window.montarLinkWhatsapp = montarLinkWhatsapp;
+
+window.CATEGORIAS = CATEGORIAS;
+window.categoriaDe = categoriaDe;
+window.configCategoria = configCategoria;
+window.tituloDoItem = tituloDoItem;
+window.mensagemWhatsapp = mensagemWhatsapp;
+window.opcoesSelect = opcoesSelect;

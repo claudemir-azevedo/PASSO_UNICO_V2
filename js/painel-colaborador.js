@@ -403,7 +403,9 @@ function aplicarFiltros() {
             calcado.estado,
             calcado.condicao,
             calcado.objetivo,
-            calcado.descricao
+            calcado.descricao,
+            calcado.medidas,
+            configCategoria(calcado).rotulo
         ]
 
         .join(" ")
@@ -448,10 +450,13 @@ function ordenarCalcados(tipo) {
 
         case "numero":
 
-            calcadosFiltrados.sort((a, b) =>
-                Number(a.numero) -
-                Number(b.numero)
-            );
+            /* itens sem número (muletas, cadeiras) vão para o fim */
+            calcadosFiltrados.sort((a, b) => {
+                const na = a.numero == null ? Infinity : Number(a.numero);
+                const nb = b.numero == null ? Infinity : Number(b.numero);
+                if (na === nb) return 0;
+                return na < nb ? -1 : 1;
+            });
 
             break;
 
@@ -550,6 +555,8 @@ function escaparHtml(valor) {
 
 function criarCard(calcado) {
 
+    const cfg = configCategoria(calcado);
+
     const imagem = calcado.foto_url
         ? `<img src="${escaparHtml(calcado.foto_url)}" alt="${escaparHtml(calcado.tipo)}" loading="lazy">`
         : `<div class="calcado-sem-imagem">Sem imagem</div>`;
@@ -561,6 +568,24 @@ function criarCard(calcado) {
     const descricao = calcado.descricao
         ? escaparHtml(String(calcado.descricao).substring(0, 120))
         : "Nenhuma descrição cadastrada.";
+
+    /* só calçados têm número; "Pé" vira "Quantidade" nas muletas;
+       cadeiras de rodas não usam esse campo */
+
+    const numeroHtml = cfg.usaNumero
+        ? `<div class="calcado-numero">Nº ${escaparHtml(calcado.numero)}</div>`
+        : "";
+
+    const peHtml = cfg.pe
+        ? `<div class="info-item">
+                <span>${escaparHtml(cfg.pe.rotuloCurto)}</span>
+                <strong>${escaparHtml(calcado.pe) || "-"}</strong>
+            </div>`
+        : "";
+
+    const medidasHtml = calcado.medidas
+        ? `<p class="calcado-descricao"><strong>Medidas:</strong> ${escaparHtml(calcado.medidas)}</p>`
+        : "";
 
     return `
 
@@ -584,9 +609,7 @@ function criarCard(calcado) {
                 <h3>${escaparHtml(calcado.tipo) || "-"}</h3>
             </div>
 
-            <div class="calcado-numero">
-                Nº ${escaparHtml(calcado.numero)}
-            </div>
+            ${numeroHtml}
 
         </div>
 
@@ -602,10 +625,7 @@ function criarCard(calcado) {
                 <strong>${escaparHtml(calcado.estado) || "-"}</strong>
             </div>
 
-            <div class="info-item">
-                <span>Pé</span>
-                <strong>${escaparHtml(calcado.pe) || "-"}</strong>
-            </div>
+            ${peHtml}
 
             <div class="info-item">
                 <span>Objetivo</span>
@@ -613,6 +633,8 @@ function criarCard(calcado) {
             </div>
 
         </div>
+
+        ${medidasHtml}
 
         <p class="calcado-descricao">${descricao}</p>
 
@@ -771,6 +793,8 @@ function abrirDetalhes(id) {
 
     const c = calcadoSelecionado;
 
+    const cfgDet = configCategoria(c);
+
     const preco = (c.preco !== null && c.preco !== undefined && c.preco !== "")
         ? "R$ " + Number(c.preco).toLocaleString("pt-BR", { minimumFractionDigits: 2 })
         : "-";
@@ -781,9 +805,11 @@ function abrirDetalhes(id) {
 
 <div class="detalhes-grid">
 
+    <div><strong>Categoria</strong><p>${escaparHtml(cfgDet.rotulo)}</p></div>
     <div><strong>Tipo</strong><p>${escaparHtml(c.tipo) || "-"}</p></div>
-    <div><strong>Número</strong><p>${escaparHtml(c.numero) || "-"}</p></div>
-    <div><strong>Pé</strong><p>${escaparHtml(c.pe) || "-"}</p></div>
+    ${cfgDet.usaNumero ? `<div><strong>Número</strong><p>${escaparHtml(c.numero) || "-"}</p></div>` : ""}
+    ${cfgDet.pe ? `<div><strong>${escaparHtml(cfgDet.pe.rotuloCurto)}</strong><p>${escaparHtml(c.pe) || "-"}</p></div>` : ""}
+    ${c.medidas ? `<div><strong>Medidas</strong><p>${escaparHtml(c.medidas)}</p></div>` : ""}
     <div><strong>Condição</strong><p>${escaparHtml(c.condicao) || "-"}</p></div>
     <div><strong>Objetivo</strong><p>${escaparHtml(c.objetivo) || "-"}</p></div>
     <div><strong>Preço</strong><p>${preco}</p></div>

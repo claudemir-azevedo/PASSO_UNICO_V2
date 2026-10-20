@@ -134,11 +134,10 @@
 
     display:grid;
 
+    /* acompanha a quantidade de filtros visíveis
+       (o campo Número some quando a categoria não é calçado) */
     grid-template-columns:
-    1.4fr
-    1fr
-    1fr
-    220px;
+    repeat(auto-fit, minmax(170px, 1fr));
 
     gap:18px;
 

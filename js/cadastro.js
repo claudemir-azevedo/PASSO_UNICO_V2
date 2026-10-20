@@ -8,6 +8,8 @@ if (!client) {
     console.error("Supabase não inicializado.");
 }
 
+const TEXTO_BOTAO = "Cadastrar item";
+
 
 /* ========================================
 ELEMENTOS
@@ -22,6 +24,126 @@ const statusCadastro =
 document.getElementById(
 "statusCadastro"
 );
+
+const campoCategoria = document.getElementById("categoria");
+const campoTipo      = document.getElementById("tipo");
+const campoPe        = document.getElementById("pe");
+const campoMedidas   = document.getElementById("medidas");
+const campoNumero    = document.getElementById("numero");
+
+const grupoNumero    = document.getElementById("grupoNumero");
+const grupoPe        = document.getElementById("grupoPe");
+const grupoMedidas   = document.getElementById("grupoMedidas");
+
+const lblTipo        = document.getElementById("lblTipo");
+const lblPe          = document.getElementById("lblPe");
+const lblMedidas     = document.getElementById("lblMedidas");
+
+
+/* ========================================
+CATEGORIAS
+(a lista vem de CATEGORIAS, em modal.js)
+======================================== */
+
+function categoriaSelecionada(){
+
+    return CATEGORIAS[campoCategoria?.value]
+        ? campoCategoria.value
+        : "calcado";
+
+}
+
+function montarCategorias(){
+
+    campoCategoria.innerHTML =
+        Object.entries(CATEGORIAS)
+            .map(([chave, cfg]) =>
+                `<option value="${escaparHTML(chave)}">${escaparHTML(cfg.rotulo)}</option>`
+            )
+            .join("");
+
+    /* permite abrir já numa categoria: cadastro.html?categoria=muleta */
+
+    const pedida =
+        new URLSearchParams(window.location.search).get("categoria");
+
+    if(pedida && CATEGORIAS[pedida]){
+        campoCategoria.value = pedida;
+    }
+
+}
+
+/* mostra só os campos que a categoria usa */
+
+function atualizarFormulario(){
+
+    const cfg = CATEGORIAS[categoriaSelecionada()];
+
+    /* tipo */
+
+    campoTipo.innerHTML =
+        `<option value="">Selecione</option>` +
+        cfg.tipos
+            .map(t => `<option value="${escaparHTML(t)}">${escaparHTML(t)}</option>`)
+            .join("");
+
+    lblTipo.textContent = `Tipo de ${cfg.rotulo.toLowerCase()}`;
+
+    /* número (só calçados) */
+
+    grupoNumero.style.display = cfg.usaNumero ? "" : "none";
+
+    if(!cfg.usaNumero){
+        campoNumero.value = "";
+    }
+
+    /* pé (calçados) ou quantidade (muletas) */
+
+    if(cfg.pe){
+
+        grupoPe.style.display = "";
+
+        lblPe.textContent = cfg.pe.rotulo;
+
+        campoPe.innerHTML =
+            `<option value="">Selecione</option>` +
+            cfg.pe.opcoes
+                .map(o => `<option value="${escaparHTML(o)}">${escaparHTML(o)}</option>`)
+                .join("");
+
+    }else{
+
+        grupoPe.style.display = "none";
+
+        campoPe.innerHTML = "";
+
+    }
+
+    /* medidas */
+
+    if(cfg.medidas){
+
+        grupoMedidas.style.display = "";
+
+        lblMedidas.textContent = cfg.medidas.rotulo;
+
+        campoMedidas.placeholder = cfg.medidas.placeholder;
+
+    }else{
+
+        grupoMedidas.style.display = "none";
+
+        campoMedidas.value = "";
+
+    }
+
+}
+
+montarCategorias();
+
+atualizarFormulario();
+
+campoCategoria.addEventListener("change", atualizarFormulario);
 
 
 /* ========================================
@@ -54,53 +176,22 @@ async ()=>{
 
 /* CAMPOS */
 
-const tipo =
-document
-.getElementById("tipo")
-?.value
-.trim();
+const categoria = categoriaSelecionada();
 
-const numero =
-document
-.getElementById("numero")
-?.value
-.trim();
+const cfg = CATEGORIAS[categoria];
 
-const cidade =
-document
-.getElementById("cidade")
-?.value
-.trim();
+const lerCampo = (id) =>
+    document.getElementById(id)?.value.trim() || "";
 
-const estado =
-document
-.getElementById("estado")
-?.value
-.trim();
-
-const pe =
-document
-.getElementById("pe")
-?.value
-.trim();
-
-const condicao =
-document
-.getElementById("condicao")
-?.value
-.trim();
-
-const objetivo =
-document
-.getElementById("objetivo")
-?.value
-.trim();
-
-const descricao =
-document
-.getElementById("descricao")
-?.value
-.trim();
+const tipo      = lerCampo("tipo");
+const numero    = lerCampo("numero");
+const cidade    = lerCampo("cidade");
+const estado    = lerCampo("estado");
+const pe        = lerCampo("pe");
+const condicao  = lerCampo("condicao");
+const objetivo  = lerCampo("objetivo");
+const descricao = lerCampo("descricao");
+const medidas   = lerCampo("medidas");
 
 const foto =
 document
@@ -112,12 +203,12 @@ document
 
 if(
 !tipo ||
-!numero ||
 !cidade ||
 !estado ||
-!pe ||
 !condicao ||
-!objetivo
+!objetivo ||
+(cfg.usaNumero && !numero) ||
+(cfg.pe && !pe)
 ){
 
 mostrarStatus(
@@ -172,7 +263,7 @@ mostrarStatus(
 btnCadastrar.disabled = false;
 
 btnCadastrar.innerText =
-"Cadastrar Calçado";
+TEXTO_BOTAO;
 
 return;
 
@@ -187,8 +278,17 @@ let fotoUrl = null;
 
 if(foto){
 
+/* tira espaços e acentos do nome do arquivo,
+   que o armazenamento do Supabase pode recusar */
+
+const nomeSeguro =
+foto.name
+.normalize("NFD")
+.replace(/[̀-ͯ]/g, "")
+.replace(/[^a-zA-Z0-9._-]/g, "-");
+
 const nomeArquivo =
-`${Date.now()}-${foto.name}`;
+`${Date.now()}-${nomeSeguro}`;
 
 const {
 error: uploadError
@@ -214,7 +314,7 @@ mostrarStatus(
 btnCadastrar.disabled = false;
 
 btnCadastrar.innerText =
-"Cadastrar Calçado";
+TEXTO_BOTAO;
 
 return;
 
@@ -253,14 +353,25 @@ await client
 usuario_id:
 session.user.id,
 
+categoria,
+
 tipo,
-numero,
+
+numero:
+cfg.usaNumero ? Number(numero) : null,
+
 cidade,
 estado,
-pe,
+
+pe:
+cfg.pe ? pe : null,
+
 condicao,
 objetivo,
 descricao,
+
+medidas:
+cfg.medidas && medidas ? medidas : null,
 
 foto_url:
 fotoUrl,
@@ -276,14 +387,14 @@ if(error){
 console.error(error);
 
 mostrarStatus(
-"Erro ao cadastrar calçado.",
+"Erro ao cadastrar item.",
 "erro"
 );
 
 btnCadastrar.disabled = false;
 
 btnCadastrar.innerText =
-"Cadastrar Calçado";
+TEXTO_BOTAO;
 
 return;
 
@@ -295,7 +406,7 @@ SUCESSO
 ======================================== */
 
 mostrarStatus(
-"Calçado cadastrado com sucesso.",
+"Item cadastrado com sucesso.",
 "sucesso"
 );
 
@@ -304,9 +415,9 @@ mostrarToast(
 "sucesso"
 );
 
-console.log("Calçado cadastrado:", {
+console.log("Item cadastrado:", {
     usuario: session.user.id,
-    numero,
+    categoria,
     tipo
 });
 
@@ -314,41 +425,24 @@ console.log("Calçado cadastrado:", {
 LIMPAR CAMPOS
 ======================================== */
 
-document.getElementById(
-"tipo"
-).value = "";
-
-document.getElementById(
-"numero"
-).value = "";
-
-document.getElementById(
-"cidade"
-).value = "";
-
-document.getElementById(
-"estado"
-).value = "";
-
-document.getElementById(
-"pe"
-).value = "";
-
-document.getElementById(
-"condicao"
-).value = "";
-
-document.getElementById(
-"objetivo"
-).value = "";
-
-document.getElementById(
-"descricao"
-).value = "";
-
-document.getElementById(
+[
+"tipo",
+"numero",
+"cidade",
+"estado",
+"pe",
+"condicao",
+"objetivo",
+"descricao",
+"medidas",
 "fotoCalcado"
-).value = "";
+].forEach(id => {
+
+    const campo = document.getElementById(id);
+
+    if(campo) campo.value = "";
+
+});
 
 
 /* ========================================
@@ -382,7 +476,7 @@ RESET
 btnCadastrar.disabled = false;
 
 btnCadastrar.innerText =
-"Cadastrar Calçado";
+TEXTO_BOTAO;
 
 }
 );
