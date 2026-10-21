@@ -58,6 +58,17 @@ async function criarConta() {
 
     }
 
+    if (!document.getElementById("aceiteTermos")?.checked) {
+
+        mostrarToast(
+            "Para criar a conta, aceite os Termos de Uso e a Política de Privacidade.",
+            "erro"
+        );
+
+        return;
+
+    }
+
     if (dados.senha.length < 6) {
 
         mostrarToast(
