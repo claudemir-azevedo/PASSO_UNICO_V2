@@ -52,6 +52,35 @@
     color: rgba(255,255,255,.8);
 }
 
+/* Imagens do cabeçalho de cada página (assets/img). Se a imagem ainda
+   não existir, aparece o fundo azul de antes. Tamanho ideal: 1920 x 600 px. */
+
+.pagina-hero{
+    --sombra: linear-gradient(90deg,
+        rgba(7,17,51,.94) 0%, rgba(7,17,51,.85) 38%,
+        rgba(7,17,51,.35) 70%, rgba(7,17,51,.15) 100%);
+    --base: linear-gradient(135deg, #071133, #0f2a63);
+}
+
+.hero-inclusao{
+    background: var(--sombra), url("../assets/img/projeto-inclusao-social.jpg") center / cover no-repeat, var(--base);
+}
+.hero-sustentabilidade{
+    background: var(--sombra), url("../assets/img/projeto-sustentabilidade.jpg") center / cover no-repeat, var(--base);
+}
+.hero-transparencia{
+    background: var(--sombra), url("../assets/img/projeto-transparencia.jpg") center / cover no-repeat, var(--base);
+}
+.hero-impacto{
+    background: var(--sombra), url("../assets/img/projeto-impacto-social.jpg") center / cover no-repeat, var(--base);
+}
+
+@media (max-width: 768px){
+    .pagina-hero{
+        --sombra: linear-gradient(rgba(7,17,51,.82), rgba(7,17,51,.82));
+    }
+}
+
 .pagina-conteudo {
 
     padding: 70px 0;
