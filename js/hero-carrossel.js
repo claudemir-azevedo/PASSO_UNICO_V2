@@ -119,7 +119,7 @@
 
         let atual = 0;
         let timer = null;
-        let pausado = movimentoReduzido;
+        let pausado = false;   /* troca sozinho sempre; quem quiser pausa no botão */
         let sobre = false;
 
         function ir(n) {
@@ -162,10 +162,11 @@
             tocar();
         });
 
-        hero.addEventListener("mouseenter", () => { sobre = true; tocar(); });
-        hero.addEventListener("mouseleave", () => { sobre = false; tocar(); });
-        hero.addEventListener("focusin", () => { sobre = true; tocar(); });
-        hero.addEventListener("focusout", () => { sobre = false; tocar(); });
+        /* pausa com o mouse em cima só em computador; no celular (toque) nunca pausa */
+        if (window.matchMedia("(hover: hover)").matches) {
+            hero.addEventListener("mouseenter", () => { sobre = true; tocar(); });
+            hero.addEventListener("mouseleave", () => { sobre = false; tocar(); });
+        }
 
         document.addEventListener("visibilitychange", () => {
             if (document.hidden) parar(); else tocar();
