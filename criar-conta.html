@@ -173,6 +173,29 @@ box-shadow:
 
 /* BOTÃO */
 
+.aceite-termos{
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin-top:22px;
+font-size:14px;
+line-height:1.5;
+color:#475569;
+text-align:left;
+}
+
+.aceite-termos input{
+width:18px;
+height:18px;
+margin-top:2px;
+flex-shrink:0;
+}
+
+.aceite-termos a{
+color:#2563eb;
+font-weight:600;
+}
+
 .botoes{
 
 margin-top:28px;
@@ -342,6 +365,14 @@ placeholder="Senha">
     value="colaborador">
 
 </div>
+
+<label class="aceite-termos">
+<input type="checkbox" id="aceiteTermos">
+<span>Li e concordo com os
+<a href="termos-de-uso.html" target="_blank" rel="noopener">Termos de Uso</a>
+e com a
+<a href="politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span>
+</label>
 
 <div class="botoes">
 
