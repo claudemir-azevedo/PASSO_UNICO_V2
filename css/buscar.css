@@ -569,6 +569,9 @@ flex:1;
 
         font-size:36px;
     }
+}
+
+/* (fim do bloco mobile; antes ele ficava aberto e prendia o resto do arquivo) */
     .card-local{
 
 margin-top:12px;
@@ -865,4 +868,125 @@ transform:translateY(-2px);
 box-shadow:
 0 12px 30px rgba(37,99,235,.25);
 
+}
+
+
+/* ========================================
+CARTÃO DO ITEM — espaçamento interno
+======================================== */
+
+.calcado-card{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+}
+
+.card-imagem{
+    height:240px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:14px;
+    background:#f8fafc;
+    overflow:hidden;
+}
+
+.card-imagem img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+}
+
+.calcado-sem-imagem{
+    color:#94a3b8;
+    font-weight:600;
+}
+
+.card-conteudo{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+    gap:14px;
+    padding:22px 24px 24px;
+}
+
+.card-topo{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.card-topo h3{
+    margin:0;
+    font-size:22px;
+    line-height:1.2;
+    font-weight:800;
+    color:#0f172a;
+}
+
+.card-topo .numero{
+    flex-shrink:0;
+    padding:6px 12px;
+    border-radius:999px;
+    background:#eef2ff;
+    color:#2563eb;
+    font-size:13px;
+    font-weight:700;
+}
+
+.card-badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.card-badges .badge{
+    padding:6px 12px;
+    border-radius:999px;
+    background:#f1f5f9;
+    border:1px solid #e2e8f0;
+    color:#334155;
+    font-size:13px;
+    font-weight:600;
+}
+
+.card-conteudo .card-local{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:15px;
+    color:#475569;
+}
+
+.card-conteudo .card-local span::before{
+    content:"/ ";
+}
+
+.card-conteudo .card-local strong{
+    color:#0f172a;
+}
+
+.card-conteudo .card-descricao{
+    margin:0;
+    font-size:14px;
+    line-height:1.6;
+    color:#64748b;
+}
+
+.card-rodape{
+    margin-top:auto;
+    padding-top:6px;
+}
+
+.card-rodape .btn-primary{
+    width:100%;
+    justify-content:center;
+}
+
+@media (max-width:640px){
+    .card-imagem{ height:210px; }
+    .card-conteudo{ padding:18px 18px 20px; }
 }
