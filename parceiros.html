@@ -54,6 +54,7 @@
         rel="stylesheet"
     >
 
+<link rel="stylesheet" href="css/vitrine-parceiros.css">
 </head>
 
 <body>
@@ -291,6 +292,22 @@
     </section>
 
     <!-- ===================================================== -->
+    <!-- VITRINE DE PARCEIROS (aparece só se houver parceiros aprovados) -->
+    <!-- ===================================================== -->
+
+    <section class="vitrine-section" id="vitrineParceiros" hidden>
+        <div class="vitrine-container">
+            <span class="section-label">QUEM CAMINHA COM A GENTE</span>
+            <h2>Nossos parceiros</h2>
+            <p class="vitrine-intro">
+                Organizações e empresas que apoiam o PASSO ÚNICO e ajudam
+                itens de mobilidade a chegar a quem precisa.
+            </p>
+            <div class="vitrine-lista" id="vitrineLista"></div>
+        </div>
+    </section>
+
+    <!-- ===================================================== -->
     <!-- CTA -->
     <!-- ===================================================== -->
 
@@ -346,6 +363,9 @@
 <script>window.paginaAtual = "parceiros";</script>
 <script src="js/header.js"></script>
 <script src="js/footer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script src="js/vitrine-parceiros.js"></script>
 
 </body>
 
