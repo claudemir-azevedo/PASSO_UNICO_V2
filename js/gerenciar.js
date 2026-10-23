@@ -451,13 +451,22 @@ ${wa ? `<a class="modal-whatsapp" href="${esc(wa)}" target="_blank" rel="noopene
 </div>
 <div class="sol-gestao">
 <label for="solStatus">Status</label>
-<select id="solStatus">${opcoes}</select>
+<select id="solStatus" onchange="atualizarExibir()">${opcoes}</select>
+<label class="sol-exibir"><input type="checkbox" id="solExibir" ${s.exibir_publicamente ? "checked" : ""} ${s.status==="aprovada" ? "" : "disabled"}> Exibir na página Parceiros (só com o aval da organização)</label>
 <label for="solObs">Observações internas</label>
 <textarea id="solObs" rows="4" maxlength="2000">${esc(s.observacoes_admin||"")}</textarea>
 <button type="button" class="btn-tabela" id="solSalvar" onclick="salvarSolicitacao(${index})">Salvar</button>
 </div>
 </div>`);
 
+}
+
+function atualizarExibir(){
+    const st = document.getElementById("solStatus").value;
+    const cx = document.getElementById("solExibir");
+    if(!cx) return;
+    cx.disabled = st !== "aprovada";
+    if(st !== "aprovada") cx.checked = false;
 }
 
 async function salvarSolicitacao(index){
@@ -472,7 +481,7 @@ async function salvarSolicitacao(index){
 
     const { data, error } = await window.supabasePainel
         .from("solicitacoes_parceria")
-        .update({ status, observacoes_admin: obs || null, updated_at: new Date().toISOString() })
+        .update({ status, exibir_publicamente: status === "aprovada" && !!document.getElementById("solExibir")?.checked, observacoes_admin: obs || null, updated_at: new Date().toISOString() })
         .eq("id", s.id)
         .select();
 
