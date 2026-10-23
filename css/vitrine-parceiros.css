@@ -1,0 +1,85 @@
+/* Vitrine de parceiros (página Parceiros) */
+
+.vitrine-section{
+    padding:90px 24px;
+    background:#ffffff;
+}
+
+.vitrine-section[hidden]{ display:none; }
+
+.vitrine-container{
+    max-width:1400px;
+    margin:0 auto;
+}
+
+.vitrine-container .section-label{ margin-bottom:12px; }
+
+.vitrine-container h2{
+    margin:0 0 12px;
+    font-size:38px;
+    font-weight:800;
+    color:#0f172a;
+}
+
+.vitrine-intro{
+    margin:0 0 36px;
+    max-width:640px;
+    font-size:17px;
+    line-height:1.7;
+    color:#64748b;
+}
+
+.vitrine-lista{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:24px;
+}
+
+.vitrine-card{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding:26px 24px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:24px;
+}
+
+.vitrine-card h3{
+    margin:0;
+    font-size:21px;
+    font-weight:800;
+    color:#0f172a;
+}
+
+.vitrine-tipo{
+    align-self:flex-start;
+    padding:5px 12px;
+    border-radius:999px;
+    background:#eef2ff;
+    color:#2563eb;
+    font-size:12px;
+    font-weight:700;
+}
+
+.vitrine-local,
+.vitrine-apoio{
+    margin:0;
+    font-size:15px;
+    line-height:1.6;
+    color:#475569;
+}
+
+.vitrine-card a{
+    margin-top:auto;
+    color:#2563eb;
+    font-weight:700;
+    text-decoration:none;
+}
+
+.vitrine-card a:hover{ text-decoration:underline; }
+
+@media (max-width:640px){
+    .vitrine-section{ padding:60px 18px; }
+    .vitrine-container h2{ font-size:30px; }
+}

@@ -636,3 +636,22 @@ vertical-align:middle;
 .sol-gestao select,.sol-gestao textarea{padding:12px;border:1.5px solid #cbd5e1;border-radius:10px;font:inherit}
 .sol-gestao .btn-tabela{align-self:flex-start;margin-top:6px}
 @media(max-width:640px){.sol-modal{padding:32px 20px 24px}.sol-linha{grid-template-columns:1fr;gap:2px}}
+
+/* checkbox de exibição pública da proposta de parceria */
+.sol-exibir{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin:6px 0 14px;
+    font-size:14px;
+    line-height:1.5;
+    color:#334155;
+    cursor:pointer;
+}
+
+.sol-exibir input{
+    width:18px;
+    height:18px;
+    margin-top:2px;
+    flex-shrink:0;
+}
