@@ -655,3 +655,17 @@ vertical-align:middle;
     margin-top:2px;
     flex-shrink:0;
 }
+
+/* logo do parceiro no painel */
+.sol-logo-atual{
+    height:84px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px;
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+}
+.sol-logo-atual img{ max-width:100%; max-height:100%; object-fit:contain; }
+.sol-dica{ font-size:12px; color:#64748b; line-height:1.4; }
