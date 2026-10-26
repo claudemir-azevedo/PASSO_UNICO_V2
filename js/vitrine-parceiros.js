@@ -28,6 +28,20 @@
             const card = document.createElement("article");
             card.className = "vitrine-card";
 
+            /* logo: só caminhos dentro de assets/img/parceiros */
+            const logo = String(p.logo_url || "").trim();
+            if (/^assets\/img\/parceiros\/[a-z0-9._-]+\.(png|jpe?g|webp|svg)$/i.test(logo)) {
+                const caixa = document.createElement("div");
+                caixa.className = "vitrine-logo";
+                const img = document.createElement("img");
+                img.src = logo;
+                img.alt = "Logo de " + (p.organizacao || "parceiro");
+                img.loading = "lazy";
+                img.addEventListener("error", () => caixa.remove());
+                caixa.appendChild(img);
+                card.appendChild(caixa);
+            }
+
             const nome = document.createElement("h3");
             nome.textContent = p.organizacao || "";
             card.appendChild(nome);

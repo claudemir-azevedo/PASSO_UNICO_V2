@@ -453,6 +453,8 @@ ${wa ? `<a class="modal-whatsapp" href="${esc(wa)}" target="_blank" rel="noopene
 <label for="solStatus">Status</label>
 <select id="solStatus" onchange="atualizarExibir()">${opcoes}</select>
 <label class="sol-exibir"><input type="checkbox" id="solExibir" ${s.exibir_publicamente ? "checked" : ""} ${s.status==="aprovada" ? "" : "disabled"}> Exibir na página Parceiros (só com o aval da organização)</label>
+<label for="solLogo">Logo do parceiro (arquivo em assets/img/parceiros, ex.: assets/img/parceiros/minha-empresa.png)</label>
+<input type="text" id="solLogo" maxlength="120" value="${esc(s.logo_url||"")}" placeholder="assets/img/parceiros/nome-do-arquivo.png">
 <label for="solObs">Observações internas</label>
 <textarea id="solObs" rows="4" maxlength="2000">${esc(s.observacoes_admin||"")}</textarea>
 <button type="button" class="btn-tabela" id="solSalvar" onclick="salvarSolicitacao(${index})">Salvar</button>
@@ -475,13 +477,19 @@ async function salvarSolicitacao(index){
     const btn = document.getElementById("solSalvar");
     const status = document.getElementById("solStatus").value;
     const obs = document.getElementById("solObs").value.trim();
+    const logo = (document.getElementById("solLogo")?.value || "").trim();
+
+    if(logo && !/^assets\/img\/parceiros\/[a-z0-9._-]+\.(png|jpe?g|webp|svg)$/i.test(logo)){
+        mostrarToast("Logo inválido. Use o formato assets/img/parceiros/nome.png","erro");
+        return;
+    }
 
     btn.disabled = true;
     btn.textContent = "Salvando...";
 
     const { data, error } = await window.supabasePainel
         .from("solicitacoes_parceria")
-        .update({ status, exibir_publicamente: status === "aprovada" && !!document.getElementById("solExibir")?.checked, observacoes_admin: obs || null, updated_at: new Date().toISOString() })
+        .update({ status, exibir_publicamente: status === "aprovada" && !!document.getElementById("solExibir")?.checked, observacoes_admin: obs || null, logo_url: logo || null, updated_at: new Date().toISOString() })
         .eq("id", s.id)
         .select();
 
