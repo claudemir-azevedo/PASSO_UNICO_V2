@@ -83,3 +83,22 @@
     .vitrine-section{ padding:60px 18px; }
     .vitrine-container h2{ font-size:30px; }
 }
+
+.vitrine-logo{
+    height:96px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 0 16px;
+    padding:10px;
+    background:#ffffff;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+}
+
+.vitrine-logo img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+    display:block;
+}
