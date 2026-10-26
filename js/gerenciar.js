@@ -453,14 +453,89 @@ ${wa ? `<a class="modal-whatsapp" href="${esc(wa)}" target="_blank" rel="noopene
 <label for="solStatus">Status</label>
 <select id="solStatus" onchange="atualizarExibir()">${opcoes}</select>
 <label class="sol-exibir"><input type="checkbox" id="solExibir" ${s.exibir_publicamente ? "checked" : ""} ${s.status==="aprovada" ? "" : "disabled"}> Exibir na página Parceiros (só com o aval da organização)</label>
-<label for="solLogo">Logo do parceiro (arquivo em assets/img/parceiros, ex.: assets/img/parceiros/minha-empresa.png)</label>
-<input type="text" id="solLogo" maxlength="120" value="${esc(s.logo_url||"")}" placeholder="assets/img/parceiros/nome-do-arquivo.png">
+<label for="solLogoArquivo">Logo do parceiro</label>
+${logoValido(s.logo_url) ? `<div class="sol-logo-atual"><img src="${esc(s.logo_url)}" alt="Logo atual"></div>
+<label class="sol-exibir"><input type="checkbox" id="solLogoRemover"> Remover o logo atual</label>` : ""}
+<input type="file" id="solLogoArquivo" accept="image/png,image/jpeg,image/webp">
+<small class="sol-dica">PNG, JPG ou WebP. O tamanho é ajustado sozinho (até 600 px de largura), não precisa redimensionar antes.</small>
 <label for="solObs">Observações internas</label>
 <textarea id="solObs" rows="4" maxlength="2000">${esc(s.observacoes_admin||"")}</textarea>
 <button type="button" class="btn-tabela" id="solSalvar" onclick="salvarSolicitacao(${index})">Salvar</button>
 </div>
 </div>`);
 
+}
+
+/* ========================================
+LOGO DO PARCEIRO
+======================================== */
+
+const URL_LOGOS = "https://cfwqfsenyjzsuckydppb.supabase.co/storage/v1/object/public/parceiros/logos/";
+
+function logoValido(url){
+    const u = String(url || "").trim();
+    if(/^assets\/img\/parceiros\/[a-z0-9._-]+\.(png|jpe?g|webp|svg)$/i.test(u)) return true;
+    return u.startsWith(URL_LOGOS) && /^[a-z0-9._-]+\.(png|jpe?g|webp)$/i.test(u.slice(URL_LOGOS.length));
+}
+
+/* reduz a imagem escolhida para no máximo 600 x 300 px e devolve o arquivo pronto */
+async function prepararLogo(arquivo){
+
+    if(!/^image\/(png|jpeg|webp)$/.test(arquivo.type)){
+        throw new Error("Use uma imagem PNG, JPG ou WebP.");
+    }
+    if(arquivo.size > 8 * 1024 * 1024){
+        throw new Error("A imagem é grande demais (máximo 8 MB).");
+    }
+
+    const url = URL.createObjectURL(arquivo);
+
+    try{
+
+        const img = await new Promise((ok, erro)=>{
+            const i = new Image();
+            i.onload = ()=>ok(i);
+            i.onerror = ()=>erro(new Error("Não foi possível ler a imagem."));
+            i.src = url;
+        });
+
+        const escala = Math.min(1, 600 / img.naturalWidth, 300 / img.naturalHeight);
+        const largura = Math.max(1, Math.round(img.naturalWidth * escala));
+        const altura = Math.max(1, Math.round(img.naturalHeight * escala));
+
+        const canvas = document.createElement("canvas");
+        canvas.width = largura;
+        canvas.height = altura;
+        canvas.getContext("2d").drawImage(img, 0, 0, largura, altura);
+
+        const gerar = (tipo, qualidade)=>new Promise(r=>canvas.toBlob(r, tipo, qualidade));
+
+        let blob = await gerar("image/png");
+        let tipo = "image/png";
+        let ext = "png";
+
+        if(!blob || blob.size > 900 * 1024){
+            blob = await gerar("image/webp", 0.85);
+            tipo = "image/webp";
+            ext = "webp";
+        }
+
+        if(!blob || blob.size > 1024 * 1024){
+            throw new Error("Não foi possível reduzir a imagem o suficiente. Tente outra.");
+        }
+
+        return { blob, tipo, ext };
+
+    } finally {
+        URL.revokeObjectURL(url);
+    }
+
+}
+
+function caminhoNoStorage(url){
+    return String(url || "").startsWith(URL_LOGOS)
+        ? "logos/" + String(url).slice(URL_LOGOS.length)
+        : null;
 }
 
 function atualizarExibir(){
@@ -477,15 +552,49 @@ async function salvarSolicitacao(index){
     const btn = document.getElementById("solSalvar");
     const status = document.getElementById("solStatus").value;
     const obs = document.getElementById("solObs").value.trim();
-    const logo = (document.getElementById("solLogo")?.value || "").trim();
+    const arquivo = document.getElementById("solLogoArquivo")?.files?.[0] || null;
+    const remover = !!document.getElementById("solLogoRemover")?.checked;
 
-    if(logo && !/^assets\/img\/parceiros\/[a-z0-9._-]+\.(png|jpe?g|webp|svg)$/i.test(logo)){
-        mostrarToast("Logo inválido. Use o formato assets/img/parceiros/nome.png","erro");
-        return;
-    }
+    let logo = logoValido(s.logo_url) ? s.logo_url : null;
+    let novoCaminho = null;
 
     btn.disabled = true;
     btn.textContent = "Salvando...";
+
+    if(arquivo){
+
+        try{
+
+            const pronto = await prepararLogo(arquivo);
+
+            novoCaminho = "logos/" + s.id + "-" + Date.now() + "." + pronto.ext;
+
+            const { error: erroUp } = await window.supabasePainel.storage
+                .from("parceiros")
+                .upload(novoCaminho, pronto.blob, { contentType: pronto.tipo, upsert: false });
+
+            if(erroUp) throw erroUp;
+
+            const { data: pub } = window.supabasePainel.storage
+                .from("parceiros")
+                .getPublicUrl(novoCaminho);
+
+            logo = pub.publicUrl;
+
+        }catch(e){
+
+            btn.disabled = false;
+            btn.textContent = "Salvar";
+            mostrarToast(e && e.message && !/storage|policy|row-level/i.test(e.message)
+                ? e.message
+                : "Não foi possível enviar o logo. Verifique se você está logado como administrador.","erro");
+            return;
+
+        }
+
+    } else if(remover){
+        logo = null;
+    }
 
     const { data, error } = await window.supabasePainel
         .from("solicitacoes_parceria")
@@ -497,8 +606,18 @@ async function salvarSolicitacao(index){
     btn.textContent = "Salvar";
 
     if(error || !data || data.length === 0){
+        if(novoCaminho){
+            /* não deixa um arquivo órfão no armazenamento */
+            await window.supabasePainel.storage.from("parceiros").remove([novoCaminho]).catch(()=>{});
+        }
         mostrarToast("Não foi possível salvar. Verifique se você está logado como administrador.","erro");
         return;
+    }
+
+    /* apaga o logo antigo do armazenamento quando ele foi trocado ou removido */
+    const antigo = caminhoNoStorage(s.logo_url);
+    if(antigo && s.logo_url !== logo){
+        await window.supabasePainel.storage.from("parceiros").remove([antigo]).catch(()=>{});
     }
 
     window.solicitacoesPainel[index] = data[0];

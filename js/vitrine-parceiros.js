@@ -28,9 +28,13 @@
             const card = document.createElement("article");
             card.className = "vitrine-card";
 
-            /* logo: só caminhos dentro de assets/img/parceiros */
+            /* logo: só arquivos de assets/img/parceiros ou da pasta de logos do Supabase */
             const logo = String(p.logo_url || "").trim();
-            if (/^assets\/img\/parceiros\/[a-z0-9._-]+\.(png|jpe?g|webp|svg)$/i.test(logo)) {
+            const URL_LOGOS = "https://cfwqfsenyjzsuckydppb.supabase.co/storage/v1/object/public/parceiros/logos/";
+            const logoOk =
+                /^assets\/img\/parceiros\/[a-z0-9._-]+\.(png|jpe?g|webp|svg)$/i.test(logo) ||
+                (logo.startsWith(URL_LOGOS) && /^[a-z0-9._-]+\.(png|jpe?g|webp)$/i.test(logo.slice(URL_LOGOS.length)));
+            if (logoOk) {
                 const caixa = document.createElement("div");
                 caixa.className = "vitrine-logo";
                 const img = document.createElement("img");
